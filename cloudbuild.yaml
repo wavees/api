@@ -1,0 +1,22 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-west4-docker.pkg.dev/$PROJECT_ID/images/wv-core:$COMMIT_SHA', '.']
+  # Push the container image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'europe-west4-docker.pkg.dev/$PROJECT_ID/images/wv-core:$COMMIT_SHA']
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'deploy'
+    - 'wv-core'
+    - '--image'
+    - 'europe-west4-docker.pkg.dev/$PROJECT_ID/images/wv-core:$COMMIT_SHA'
+    - '--region'
+    - 'europe-west4'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+images:
+  - 'europe-west4-docker.pkg.dev/$PROJECT_ID/images/wv-core:$COMMIT_SHA'

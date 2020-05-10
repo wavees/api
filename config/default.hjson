@@ -1,0 +1,16 @@
+{
+  callback: {
+    url: "https://wavees.co.vu"
+  },
+  email: {
+    key: "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",
+    verifyKey: "at_YrhMsFnAoqqAON3qLS0XMxRcubYIL"
+  },
+  nodes: {
+    main: {
+      url: "http://35.228.254.172:3001",
+      key: "hellothere"
+    },
+    list: []
+  }
+}

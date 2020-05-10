@@ -1,0 +1,24 @@
+{
+  "name": "wv-core",
+  "version": "1.0.0",
+  "description": "Core Application for Wavees Services",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Wavees",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@sendgrid/mail": "^7.0.1",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "hjson": "^3.2.1",
+    "jshashes": "^1.0.8",
+    "lowdb": "^1.0.0"
+  }
+}
