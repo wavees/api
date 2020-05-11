@@ -29,6 +29,7 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(3000, function() {
+const { PORT } = process.env;
+const listener = app.listen(PORT, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });
