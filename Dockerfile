@@ -1,12 +1,11 @@
 # @stage Application build
 # This stage build Sapper application.
-FROM mhart/alpine-node:12
-WORKDIR /app
+FROM mhart/alpine-node:slim-12
 COPY . .
 RUN npm install --no-audit --unsafe-perm
 
-# @stage Run Sapper application
+# @stage Run application
 # This stage just exposes port, on which our application
-# will run, and runs Sapper application. Nothing special.
+# will run. Nothing special.
 EXPOSE 3000
 CMD ["node", "index.js"]
