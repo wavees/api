@@ -1,6 +1,6 @@
 # @stage Application build
 # This stage build Sapper application.
-FROM mhart/alpine-node:slim-12
+FROM mhart/alpine-node:12
 COPY . .
 RUN npm install --no-audit --unsafe-perm
 
