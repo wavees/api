@@ -1,6 +1,8 @@
 const app = require('express')();
 const path = require('path');
 
+const { PORT } = process.env;
+
 // HELPERS
 const helpers = {
   walk: require('./helpers/files/walk')
@@ -29,7 +31,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const { PORT } = process.env;
 const listener = app.listen(PORT, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });

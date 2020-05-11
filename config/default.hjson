@@ -1,4 +1,7 @@
 {
+  api: {
+    url: "https://api.wavees.co.vu"
+  },
   callback: {
     url: "https://wavees.co.vu"
   },
