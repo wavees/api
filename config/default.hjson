@@ -51,7 +51,7 @@
 
         // Icon name. All icons are stored in ./static/logotypes/
         // And this is name of project icon.
-        icon: "https://api.wavees.co.vu/static/logotypes/bokkr.svg",
+        icon: "https://api.wavees.co.vu/logotypes/bokkr.svg",
 
         // Unnecessary value. It allows us to show some projects
         // only in promotion purposes. For example: if set to "promotion",
@@ -96,7 +96,7 @@
         stateColor: "bg-red-400",
         
         url: "timey.wavees.co.vu",
-        icon: "https://api.wavees.co.vu/static/logotypes/timey.svg",
+        icon: "https://api.wavees.co.vu/logotypes/timey.svg",
         type: "noPromotion",
         description: {
           promotion: ""
@@ -109,7 +109,7 @@
         stateColor: "bg-orange-300",
 
         url: "@pigeon",
-        icon: "https://api.wavees.co.vu/static/logotypes/pigeon.svg",
+        icon: "https://api.wavees.co.vu/logotypes/pigeon.svg",
         description: {
           promotion: "projects.promotions.pigeon"
         }
@@ -121,7 +121,7 @@
         stateColor: "bg-orange-300",
 
         url: "@unicorn",
-        icon: "https://api.wavees.co.vu/static/logotypes/unicorn.svg",
+        icon: "https://api.wavees.co.vu/logotypes/unicorn.svg",
         description: {
           promotion: "projects.promotions.unicorn"
         }
@@ -133,7 +133,7 @@
         stateColor: "bg-teal-400",
         
         url: "paradiser.ml",
-        icon: "https://api.wavees.co.vu/static/logotypes/paradise.svg",
+        icon: "https://api.wavees.co.vu/logotypes/paradise.svg",
         type: "noPromotion",
         description: {
           promotion: "projects.promotions.paradise"
