@@ -49,9 +49,9 @@
         // For example: bokkr.wavees.co.vu in this case
         url: "@bokkr",
 
-        // Icon name. All icons are stored in ./static/icons/logo/
+        // Icon name. All icons are stored in ./static/logotypes/
         // And this is name of project icon.
-        icon: "logo/bokkr",
+        icon: "https://api.wavees.co.vu/static/logotypes/bokkr.svg",
 
         // Unnecessary value. It allows us to show some projects
         // only in promotion purposes. For example: if set to "promotion",
@@ -96,7 +96,7 @@
         stateColor: "bg-red-400",
         
         url: "timey.wavees.co.vu",
-        icon: "logo/timey",
+        icon: "https://api.wavees.co.vu/static/logotypes/timey.svg",
         type: "noPromotion",
         description: {
           promotion: ""
@@ -109,7 +109,7 @@
         stateColor: "bg-orange-300",
 
         url: "@pigeon",
-        icon: "logo/pigeon",
+        icon: "https://api.wavees.co.vu/static/logotypes/pigeon.svg",
         description: {
           promotion: "projects.promotions.pigeon"
         }
@@ -121,7 +121,7 @@
         stateColor: "bg-orange-300",
 
         url: "@unicorn",
-        icon: "logo/unicorn",
+        icon: "https://api.wavees.co.vu/static/logotypes/unicorn.svg",
         description: {
           promotion: "projects.promotions.unicorn"
         }
@@ -133,7 +133,7 @@
         stateColor: "bg-teal-400",
         
         url: "paradiser.ml",
-        icon: "logo/paradise",
+        icon: "https://api.wavees.co.vu/static/logotypes/paradise.svg",
         type: "noPromotion",
         description: {
           promotion: "projects.promotions.paradise"
@@ -143,7 +143,7 @@
         // System will try to find name of this app in
         // localization files.
         name: "@projects.promotions.userApps.title",
-        icon: "grid",
+        icon: "",
         type: "promotion",
         description: {
           promotion: "projects.promotions.userApps.description"

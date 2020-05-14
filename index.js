@@ -1,5 +1,6 @@
-const app = require('express')();
-const path = require('path');
+const express = require('express';)
+const app     = express();
+const path    = require('path');
 
 const { PORT } = process.env;
 
@@ -10,6 +11,8 @@ const helpers = {
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
+
+app.use(express.static('static'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
