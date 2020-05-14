@@ -56,7 +56,7 @@ router.post('/', (req, res) => {
         res.status(500);
         res.end(JSON.stringify({ error: body.error }));
       } else {
-        res.end(JSON.stringify({ id: body.document._id, url: `${config.get('callback.url')}/callback/${body.document._id}` }));
+        res.end(JSON.stringify({ id: body.document._id, url: `${config.get('callback.url')}/${body.document._id}` }));
       }
     }).catch(() => {
       res.status(500);

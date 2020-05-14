@@ -1,19 +1,154 @@
 {
+  // 
   api: {
     url: "https://api.wavees.co.vu"
   },
+
+  // 
+  // Authorization callback config
+  // 
+  // => callback.url - URL to callback page
+
   callback: {
-    url: "https://wavees.co.vu"
+    url: "https://account.wavees.co.vu/authorize"
   },
+
+  // 
   email: {
     key: "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",
     verifyKey: "at_YrhMsFnAoqqAON3qLS0XMxRcubYIL"
   },
+
+  // 
   nodes: {
     main: {
       url: "http://35.228.254.172:3001",
       key: "hellothere"
     },
     list: []
+  },
+
+  // 
+  // 
+  // 
+  network: {
+    projects: [
+      // 
+      // Explanation of every project entry.
+      // 
+      {
+        // Name of service
+        // If name contains "@" symbol, then system will try
+        // to find translation for this title on different
+        // languages. Very usefull, ya know.
+        name: "Bokkr",
+
+        // URL of service
+        // If it starts with "@" symbol - than system
+        // will redirect you to main domain's subdomain.
+        // For example: bokkr.wavees.co.vu in this case
+        url: "@bokkr",
+
+        // Icon name. All icons are stored in ./static/icons/logo/
+        // And this is name of project icon.
+        icon: "logo/bokkr",
+
+        // Unnecessary value. It allows us to show some projects
+        // only in promotion purposes. For example: if set to "promotion",
+        // this project will only appear on register screen and
+        // nowhere else.
+
+        // @values: "promotion", "noPromotion", null
+        type: null,
+
+        // Project state. It allows us to show state of each project
+        // in project list.
+
+        // @values: "wip", "active" ...
+        state: "WIP",
+        stateColor: "bg-orange-300",
+
+        // Different descriptions for different
+        // pages. 
+        description: { 
+          // Description of service on
+          // register page. We need to
+          // promote this app to user, don't we?
+          // 
+          // @explanation: We store all our texts
+          // in localization files. And this is path
+          // to exact this localalization.
+          promotion: "projects.promotions.bokkr"
+    
+          // Probably, there will be another
+          // types of description for this
+          // project. I dunno
+        }
+
+        // 
+        // Meaning of this objects explained there ⬆
+        //
+      },
+      {
+        name: "Timey",
+
+        state: "BETA",
+        stateColor: "bg-red-400",
+        
+        url: "timey.wavees.co.vu",
+        icon: "logo/timey",
+        type: "noPromotion",
+        description: {
+          promotion: ""
+        }
+      },
+      {
+        name: "Pigeon",
+        
+        state: "WIP",
+        stateColor: "bg-orange-300",
+
+        url: "@pigeon",
+        icon: "logo/pigeon",
+        description: {
+          promotion: "projects.promotions.pigeon"
+        }
+      },
+      {
+        name: "Unicorn",
+
+        state: "WIP",
+        stateColor: "bg-orange-300",
+
+        url: "@unicorn",
+        icon: "logo/unicorn",
+        description: {
+          promotion: "projects.promotions.unicorn"
+        }
+      },
+      {
+        name: "Paradise",
+
+        state: "@states.frozen",
+        stateColor: "bg-teal-400",
+        
+        url: "paradiser.ml",
+        icon: "logo/paradise",
+        type: "noPromotion",
+        description: {
+          promotion: "projects.promotions.paradise"
+        }
+      },
+      {
+        // System will try to find name of this app in
+        // localization files.
+        name: "@projects.promotions.userApps.title",
+        icon: "grid",
+        type: "promotion",
+        description: {
+          promotion: "projects.promotions.userApps.description"
+        }
+      }
+    ]
   }
 }
