@@ -1,7 +1,7 @@
 const config = require('config');
 const axios  = require('axios');
 
-const randomizer = require('../../helpers/randomizer');
+const randomizer = require('../randomizer');
 
 module.exports = (data) => {
   return new Promise((resolve, reject) => {

@@ -23,6 +23,8 @@ helpers.walk('./routes', (error, files) => {
     let route = require(element);
     let url = path.relative(__dirname + '/routes', element).split('.').shift();
     
+    // console.log(url);
+    // console.log(route);
     try {
       app.use(`/${url == "index" ? "" : url}`, route);
     }
@@ -34,6 +36,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(PORT, function() {
+const listener = app.listen(3000, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });
