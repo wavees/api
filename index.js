@@ -21,12 +21,15 @@ app.use(cors());
 helpers.walk('./routes', (error, files) => {
   files.forEach((element) => {
     let route = require(element);
-    let url = path.relative(__dirname + '/routes', element).split('.').shift();
+    let filePath = path.relative(__dirname + '/routes', element);
+    let url = filePath.split('.').shift();
     
-    // console.log(url);
-    // console.log(route);
     try {
-      app.use(`/${url == "index" ? "" : url}`, route);
+      if (url.includes("index")) {
+        url = path.dirname(filePath);
+      };
+      console.log(url);
+      app.use(`/${url == "." ? "" : url}`, route);
     }
 
     // Lock at this! It's a very complicated logging system!1!!
@@ -36,6 +39,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(3000, function() {
+const listener = app.listen(PORT, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });

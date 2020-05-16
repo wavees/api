@@ -5,12 +5,12 @@ const config  = require('config');
 const Joi     = require("@hapi/joi");
 
 const helpers = {
-  createToken: require('../helpers/tokens/create'),
-  getToken: require('../helpers/tokens/get'),
-  updateToken: require('../helpers/tokens/update'),
+  createToken: require('../../helpers/tokens/create'),
+  getToken: require('../../helpers/tokens/get'),
+  updateToken: require('../../helpers/tokens/update'),
 
-  randomizer: require('../helpers/randomizer'),
-  removeFromArray: require('../helpers/removeFromArray')
+  randomizer: require('../../helpers/randomizer'),
+  removeFromArray: require('../../helpers/removeFromArray')
 };
 
 // 
