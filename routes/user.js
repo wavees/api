@@ -58,6 +58,25 @@ const helpers = {
 //   }
 // });
 
+router.get('/validate/:email', (req, res) => {
+  let email = req.params.email;
+  
+  // CHECK EMAIL
+  axios.get(`https://emailverification.whoisxmlapi.com/api/v1?apiKey=${config.get('email.verifyKey')}&emailAddress=${email}`)
+  .then((response) => {
+    if (response.data.smtpCheck == "true") {
+      console.log("VALID");
+      res.end(JSON.stringify({ valid: true, error: null }));
+    } else {
+      console.log("INVALID");
+      res.end(JSON.stringify({ valid: false, error: "invalidEmail" }));
+    }
+  }).catch((error) => {
+    console.log(error);
+    res.status(500).end(JSON.stringify({ error: "ServerError", message: error }))
+  })
+});
+
 // check user
 router.get('/check/:email', (req, res) => {
   axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","email":"${req.params.email}"}`)
