@@ -231,7 +231,7 @@ router.get('/:token/applications/:origin', (req, res) => {
 
         type: "disclaimer",
         registrat: {
-          url: origin
+          url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0]
         }
       };
       helpers.getStore(token, query)
