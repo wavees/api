@@ -4,9 +4,14 @@ const config = require('config');
 const Joi    = require('@hapi/joi');
 const axios  = require('axios');
 
+const psl    = require('psl');
+
 const helpers = {
   createToken: require('../helpers/tokens/create'),
-  getToken: require('../helpers/tokens/get')
+  getToken: require('../helpers/tokens/get'),
+
+  createStore: require('../helpers/stores/create'),
+  getStore: require('../helpers/stores/get')
 };
 
 router.get('/:id', (req, res) => {
@@ -73,6 +78,7 @@ router.get('/finish/:id/:token', (req, res) => {
   axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"callbacks","_id":"${id}"}`)
   .then((response) => {
     let body = response.data;
+    let callback = body;
 
     if (body.error == "404") {
       res.status(404);
@@ -95,17 +101,43 @@ router.get('/finish/:id/:token', (req, res) => {
               // Delete callback...
             } else {
               // Create user token...
-              helpers.createToken({ uid: data.data.uid, type: "user", expires: Math.floor(new Date() / 1000) + 604800 })
+
+              helpers.createToken({ 
+                uid: data.data.uid, 
+                type: "user", 
+                expires: Math.floor(new Date() / 1000) + 604800,
+                registrat: callback.registrat })
               .then((data) => {
-                res.end(JSON.stringify({ token: data.token }));
+                // Let's check for dislaimer
+                let query = { 
+                  type: "disclaimer", 
+                  registrat: { 
+                    url: callback.url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
+                  }
+                };
+
+                helpers.getStore(token, query)
+                .then((response) => {
+                  if (response.length <= 0) {
+                    // Create new user store for that domain/subdomain...
+                    helpers.createStore(token, query)
+                  }
+                });
+
+                res.send(JSON.stringify({ token: data.token }));
               }).catch((error) => {
                 res.status(500);
-                console.log(error);
-                console.log("FIRST ERROR");
                 res.end(JSON.stringify({ error: "ServerError" }));
               })
 
               // Delete callback...
+              let query = {
+                $$storage: "callbacks",
+                $$multi: false,
+
+                _id: callback._id
+              };
+              axios.delete(`${config.get('nodes.main.url')}/delete/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
             }
           }).catch(() => {
             res.status(500);

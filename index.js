@@ -28,8 +28,8 @@ helpers.walk('./routes', (error, files) => {
       if (url.includes("index")) {
         url = path.dirname(filePath);
       };
-      console.log(url);
-      app.use(`/${url == "." ? "" : url}`, route);
+
+      app.use(`/${url == "." ? "" : url}`, route)
     }
 
     // Lock at this! It's a very complicated logging system!1!!
@@ -39,6 +39,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(PORT, function() {
+const listener = app.listen(3000, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });
