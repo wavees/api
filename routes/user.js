@@ -87,7 +87,7 @@ router.get('/check/:email', (req, res) => {
       res.status(404);
       res.end(JSON.stringify({ exists: false, error: "NotFound" }));
     } else {
-      res.end(JSON.stringify({ exists: true }));
+      res.end(JSON.stringify({ exists: true, avatar: body.avatar == null ? "" : body.avatar}));
     }
   }).catch(() => {
     res.status(500);
