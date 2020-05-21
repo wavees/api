@@ -92,7 +92,7 @@ router.get('/check/:email', (req, res) => {
       res.status(404);
       res.end(JSON.stringify({ exists: false, error: "NotFound" }));
     } else {
-      res.end(JSON.stringify({ exists: true, avatar: body.avatar == null ? "https://cdn.dribbble.com/users/45488/screenshots/9084073/media/f889543c2e901048f8da2d9915d0bf37.jpg" : body.avatar}));
+      res.end(JSON.stringify({ exists: true, avatar: body.avatar == null ? null : `${config.get('api.avatars')}/${body.avatar}`}));
     }
   }).catch(() => {
     res.status(500);
