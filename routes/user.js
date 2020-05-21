@@ -118,7 +118,7 @@ router.get('/:token', (req, res) => {
             _id: user._id, 
             email: user.email, 
             username: user.username, 
-            avatar: user.avatar || "https://cdn.dribbble.com/users/45488/screenshots/9084073/media/f889543c2e901048f8da2d9915d0bf37.jpg"
+            avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
           }));
         }
       })
@@ -169,7 +169,7 @@ router.post('/:token/avatar', (req, res) => {
               headers: formData.getHeaders() 
             })
             .then((response) => {
-              let avatarURL = `${config.get('nodes.main.url')}/files/get/${response.data.token}`;
+              let avatarURL = response.data.token;
 
               // Let's update user account...
               axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","_id":"${data.uid}"}`)

@@ -1,7 +1,8 @@
 {
   // 
   api: {
-    url: "https://api.wavees.co.vu"
+    url: "https://api.wavees.co.vu",
+    avatars: "https://gwi.glitch.me"
   },
 
   // 
