@@ -143,7 +143,7 @@ router.put('/:token', (req, res) => {
 
           helpers.updateToken(token, object)
           .then((response) => {
-            res.end(JSON.stringify(response)); //h3Bg0ZYiJmLg
+            res.end(JSON.stringify(response));
           })
           .catch((error) => {
             res.status(500).end(JSON.stringify({ error: "ServerError", message: error }));

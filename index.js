@@ -1,6 +1,7 @@
-const express = require('express');
-const app     = express();
-const path    = require('path');
+const express    = require('express');
+const app        = express();
+const path       = require('path');
+const fileUpload = require('express-fileupload');
 
 const { PORT } = process.env;
 
@@ -13,6 +14,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 app.use(express.static('static'));
+app.use(fileUpload());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -29,6 +31,7 @@ helpers.walk('./routes', (error, files) => {
         url = path.dirname(filePath);
       };
 
+      console.log(url);
       app.use(`/${url == "." ? "" : url}`, route)
     }
 
@@ -39,6 +42,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(PORT, function() {
+const listener = app.listen(3000, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });

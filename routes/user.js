@@ -1,16 +1,21 @@
-const router = require('express').Router();
-const axios  = require('axios');
+const router   = require('express').Router();
+const axios    = require('axios');
+const FormData = require('form-data');
+const fs       = require('fs');
 
-const config = require('config');
+const config   = require('config');
+const randomizer = require('../helpers/randomizer');
 
-const helpers = {
+const helpers  = {
   login: require('../helpers/user/login'),
   register: require('../helpers/user/register'),
 
   createToken: require('../helpers/tokens/create'),
   getToken: require('../helpers/tokens/get'),
+  updateToken: require('../helpers/tokens/update'),
   
-  checkApplication: require('../applications/check.js')
+  checkApplication: require('../applications/check.js'),
+  setAvatar: require('../helpers/user/avatar')
 };
 
 // 
@@ -129,6 +134,81 @@ router.get('/:token', (req, res) => {
   .catch(() => {
     res.status(400);
     res.end(JSON.stringify({ error: "InvalidToken" }));
+  });
+});
+
+router.post('/:token/avatar', (req, res) => {
+  let token = req.params.token;
+  
+  // Check for files
+  if (!req.files) {
+    return res.status(400).end(JSON.stringify({ error: "InvalidPayload" }));
+  };
+
+  // Check for user token.
+  helpers.getToken(token)
+  .then((response) => {
+    let data = response.data;
+
+    if (data.type == "user") {
+      let avatar = req.files.avatar;
+      let tempPath = `./temporary/${randomizer(12)}.${avatar.name.split('.')[1]}`;
+
+      if (avatar) {
+        avatar.mv(tempPath, (error) => {
+          if (error) {
+            console.log('error 5');
+            console.log(error);
+            res.status(500).end(JSON.stringify({ error: "ServerError" }));
+          } else {
+            let formData = new FormData();
+            formData.append("image", fs.createReadStream(tempPath), avatar.name);
+    
+            axios.post(`${config.get('nodes.main.url')}/files/post/${config.get('nodes.main.key')}`, formData, 
+            { 
+              headers: formData.getHeaders() 
+            })
+            .then((response) => {
+              let avatarURL = `${config.get('nodes.main.url')}/files/get/${response.data.token}`;
+
+              // Let's update user account...
+              axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","_id":"${data.uid}"}`)
+              .then((response) => {
+                let user = response.data;
+                user.avatar = avatarURL;
+
+                axios.put(`${config.get('nodes.main.url')}/update/${config.get('nodes.main.key')}/{"$$storage":"users","_id":"${data.uid}"}`, user)
+                .then((response) => {
+                  let data = response.data;
+
+                  console.log(data);
+                  res.end(JSON.stringify(data));
+                }).catch((error) => {
+                  console.log('erro 56');
+                  console.log(error);
+
+                  res.status(500).end(JSON.stringify({ error: "ServerError" }));
+                })
+              }).catch((error) => {
+                console.log('erro 4');
+                console.log(error);
+                res.status(500).end(JSON.stringify({ error: "ServerError" }));
+              })
+            }).catch((error) => {
+              console.log('error 1');
+              console.log(error);
+              res.status(500).end(JSON.stringify({ error: "ServerError" }));
+            });
+          }
+        });
+      }
+    } else {
+      res.status(400).end(JSON.stringify({ error: "InvalidPayload" }));
+    };
+  }).catch((error) => {
+    console.log('error 3');
+    console.log(error);
+    res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error }));
   });
 });
 
