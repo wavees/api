@@ -74,26 +74,37 @@ router.get('/:token', (req, res) => {
         user.pincode = null;
         
         // Let's check if user approved this application.
-        helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
-        .then((response) => {
-          if (response.length <= 0 && !origin == "account.wavees.co.vu") {
-            res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
+        let object = {
+          _id: user._id, 
+          email: user.email, 
+          username: user.username, 
+          avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
+        };
+
+        if (origin == "account.wavees.co.vu" || origin == "api.wavees.co.vu") {
+          if (user.email == null || user.username == null) {
+            res.status(500);
+            res.end(JSON.stringify({ error: "UserNotFound" }));
           } else {
-            if (user.email == null || user.username == null) {
-              res.status(500);
-              res.end(JSON.stringify({ error: "UserNotFound" }));
+            res.end(JSON.stringify(object));
+          };
+        } else {
+          helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
+          .then((response) => {
+            if (response.length <= 0) {
+              res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
             } else {
-              res.end(JSON.stringify({ 
-                _id: user._id, 
-                email: user.email, 
-                username: user.username, 
-                avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
-              }));
-            };
-          }
-        }).catch((error) => {
-          res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
-        });
+              if (user.email == null || user.username == null) {
+                res.status(500);
+                res.end(JSON.stringify({ error: "UserNotFound" }));
+              } else {
+                res.end(JSON.stringify(object));
+              };
+            }
+          }).catch((error) => {
+            res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
+          });
+        };
       })
       .catch(() => {
         res.status(500);
