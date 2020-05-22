@@ -112,7 +112,6 @@ router.get('/finish/:id/:token', (req, res) => {
                 let query = { 
                   type: "redirect",
                   registrat: {
-                    time: new Date(),
                     url: callback.url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
                   }
                 };
@@ -121,6 +120,7 @@ router.get('/finish/:id/:token', (req, res) => {
                 .then((response) => {
                   if (response.length <= 0) {
                     // Create new user store for that domain/subdomain...
+                    query.time = new Date();
                     helpers.createStore(token, query)
                   }
                 });
