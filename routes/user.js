@@ -61,6 +61,7 @@ router.get('/check/:email', (req, res) => {
 router.get('/:token', (req, res) => {
   let token = req.params.token;
   let origin = req.get('origin') || req.get('host');
+  origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
 
   console.log(origin);
 
@@ -73,9 +74,9 @@ router.get('/:token', (req, res) => {
         user.pincode = null;
         
         // Let's check if user approved this application.
-        helpers.getStore(token, { type: "redirect", registrat: { url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0] } })
+        helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
         .then((response) => {
-          if (response.length <= 0) {
+          if (response.length <= 0 || !origin == "account.wavees.co.vu") {
             res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
           } else {
             if (user.email == null || user.username == null) {
