@@ -12,7 +12,8 @@ const helpers = {
   randomizer: require('../../helpers/randomizer'),
   removeFromArray: require('../../helpers/removeFromArray'),
 
-  getStore: require('../../helpers/stores/get')
+  getStore: require('../../helpers/stores/get'),
+  deleteStore: require('../../helpers/stores/delete')
 };
 
 // 
@@ -279,25 +280,41 @@ router.get('/:token/applications', (req, res) => {
       }).catch((error) => {
         res.status(error == "InvalidToken" ? 400 : 500).end(JSON.stringify({ error }));
       })
-      // axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
-      // .then((response) => {
-      //   let data = response.data;
-
-      //   if (data.error != "404") {
-      //     res.end(JSON.stringify(data));
-      //   } else {
-      //     res.status(404).end(JSON.stringify({ error: "NotFound" }));
-      //   }
-      // }).catch((error) => {
-      //   console.log(error);
-      //   res.status(500).end(JSON.stringify({ error: "ServerError" }));
-      // })
     } else {
       res.status(404).end(JSON.stringify({ error: "NotFound" }));
     }
   }).catch((error) => {
     res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error }));
   })
+});
+
+router.delete('/:token/application/:origin', (req, res) => {
+  let token = req.params.token;
+  let origin = req.params.origin;
+  
+  helpers.getToken(token)
+  .then((response) => {
+    let data = response.data;
+
+    if (data.type == "user") {
+      // Let's delete this store.
+      let query = {
+        registrat: {
+          url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0]
+        }
+      };
+      helpers.deleteStore(token, query)
+      .then((response) => {
+        res.end(JSON.stringify(response));
+      }).catch((error) => {
+        res.status(500).end(JSON.stringify({ error: "ServerError" }));
+      })
+    } else {
+      res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
+    }
+  }).catch((error) => {
+    res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error }));
+  });
 });
 
 module.exports = router;
