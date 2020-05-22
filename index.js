@@ -3,7 +3,7 @@ const app        = express();
 const path       = require('path');
 const fileUpload = require('express-fileupload');
 
-const { PORT } = process.env;
+const { PORT, DEV } = process.env;
 
 // HELPERS
 const helpers = {
@@ -42,6 +42,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(3000, function() {
+const listener = app.listen(DEV ? PORT : 3000, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });
