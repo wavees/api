@@ -76,7 +76,7 @@ router.get('/:token', (req, res) => {
         // Let's check if user approved this application.
         helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
         .then((response) => {
-          if (response.length <= 0 || !origin == "account.wavees.co.vu") {
+          if (response.length <= 0 && !origin == "account.wavees.co.vu") {
             res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
           } else {
             if (user.email == null || user.username == null) {
