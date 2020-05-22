@@ -31,7 +31,7 @@ helpers.walk('./routes', (error, files) => {
         url = path.dirname(filePath);
       };
 
-      // console.log(url);
+      console.log(url);
       app.use(`/${url == "." ? "" : url}`, route)
     }
 
@@ -42,6 +42,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(PORT, function() {
+const listener = app.listen(3000, function() {
   console.log("wv-core application is listening on " + listener.address().port);
 });

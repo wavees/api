@@ -229,7 +229,7 @@ router.get('/:token/applications/:origin', (req, res) => {
       let query = {
         $$findOne: true,
 
-        type: "disclaimer",
+        type: "redirect",
         registrat: {
           url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0]
         }
@@ -258,6 +258,43 @@ router.get('/:token/applications/:origin', (req, res) => {
   }).catch((error) => {
     console.log(error);
     res.status(500).end(JSON.stringify({ error: "ServerError", message: error }));
+  })
+});
+
+router.get('/:token/applications', (req, res) => {
+  let token = req.params.token;
+
+  helpers.getToken(token)
+  .then((response) => {
+    let data = response.data;
+
+    if (data.type == "user") {
+      let query = {
+        $$storage: "tokens",
+        $$findOne: false,
+
+        uid: response._id,
+        type: "redirect",
+      };
+
+      axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
+      .then((response) => {
+        let data = response.data;
+
+        if (data.error != "404") {
+          res.end(JSON.stringify(data));
+        } else {
+          res.status(404).end(JSON.stringify({ error: "NotFound" }));
+        }
+      }).catch((error) => {
+        console.log(error);
+        res.status(500).end(JSON.stringify({ error: "ServerError" }));
+      })
+    } else {
+      res.status(404).end(JSON.stringify({ error: "NotFound" }));
+    }
+  }).catch((error) => {
+    res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error }));
   })
 });
 

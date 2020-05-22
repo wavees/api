@@ -110,7 +110,8 @@ router.get('/finish/:id/:token', (req, res) => {
               .then((data) => {
                 // Let's check for dislaimer
                 let query = { 
-                  type: "disclaimer", 
+                  type: "redirect", 
+                  uid: data.data.uid,
                   registrat: { 
                     url: callback.url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
                   }
