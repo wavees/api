@@ -270,26 +270,28 @@ router.get('/:token/applications', (req, res) => {
 
     if (data.type == "user") {
       let query = {
-        $$storage: "tokens",
-        $$findOne: false,
-
-        uid: response._id,
         type: "redirect",
       };
 
-      axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
+      helpers.getStore(token, query)
       .then((response) => {
-        let data = response.data;
-
-        if (data.error != "404") {
-          res.end(JSON.stringify(data));
-        } else {
-          res.status(404).end(JSON.stringify({ error: "NotFound" }));
-        }
+        res.end(JSON.stringify(response));
       }).catch((error) => {
-        console.log(error);
-        res.status(500).end(JSON.stringify({ error: "ServerError" }));
+        res.status(error == "InvalidToken" ? 400 : 500).end(JSON.stringify({ error }));
       })
+      // axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
+      // .then((response) => {
+      //   let data = response.data;
+
+      //   if (data.error != "404") {
+      //     res.end(JSON.stringify(data));
+      //   } else {
+      //     res.status(404).end(JSON.stringify({ error: "NotFound" }));
+      //   }
+      // }).catch((error) => {
+      //   console.log(error);
+      //   res.status(500).end(JSON.stringify({ error: "ServerError" }));
+      // })
     } else {
       res.status(404).end(JSON.stringify({ error: "NotFound" }));
     }
