@@ -111,7 +111,8 @@ router.get('/finish/:id/:token', (req, res) => {
                 // Let's check for dislaimer
                 let query = { 
                   type: "redirect",
-                  registrat: { 
+                  registrat: {
+                    time: new Date(),
                     url: callback.url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
                   }
                 };
