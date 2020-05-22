@@ -15,53 +15,10 @@ const helpers  = {
   updateToken: require('../helpers/tokens/update'),
   
   checkApplication: require('../applications/check.js'),
-  setAvatar: require('../helpers/user/avatar')
+  setAvatar: require('../helpers/user/avatar'),
+
+  getStore: require('../helpers/stores/get')
 };
-
-// 
-// application storage
-// 
-
-// router.get('/store/:token/:application', (req, res) => {
-//   let token = req.params.token;
-//   let application = helpers.checkApplication(req.params.application);
-
-//   if (application.error == "NotFound") {
-//     res.status(404);
-//     res.end(JSON.stringify({ error: "ApplicationNotFound" }));
-//   } else {
-//     // User check
-//     helpers.getToken(req.params.token)
-//     .then((data) => {
-//       if (data.data.type == "user") {
-//         axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","_id":"${data.data.uid}"}`)
-//         .then((response) => {
-//           let user = response.data;
-//           user.pincode = null;
-
-//           if (user.email == null || user.username == null) {
-//             res.status(500);
-//             res.end(JSON.stringify({ error: "UserNotFound" }));
-//           } else {
-//             // user found, okay. Now let's check this
-//             // application storage in user's account.
-//           }
-//         })
-//         .catch(() => {
-//           res.status(500);
-//           res.end(JSON.stringify({ error: "ServerError" }));
-//         });
-//       } else {
-//         res.status(400);
-//         res.end(JSON.stringify({ error: "InvalidToken" }));
-//       }
-//     })
-//     .catch(() => {
-//       res.status(400);
-//       res.end(JSON.stringify({ error: "InvalidToken" }));
-//     });
-//   }
-// });
 
 router.get('/validate/:email', (req, res) => {
   let email = req.params.email;
@@ -102,7 +59,12 @@ router.get('/check/:email', (req, res) => {
 
 // get user
 router.get('/:token', (req, res) => {
-  helpers.getToken(req.params.token)
+  let token = req.params.token;
+  let origin = req.get('origin') || req.get('host');
+
+  console.log(origin);
+
+  helpers.getToken(token)
   .then((data) => {
     if (data.data.type == "user") {
       axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","_id":"${data.data.uid}"}`)
@@ -110,17 +72,27 @@ router.get('/:token', (req, res) => {
         let user = response.data;
         user.pincode = null;
         
-        if (user.email == null || user.username == null) {
-          res.status(500);
-          res.end(JSON.stringify({ error: "UserNotFound" }));
-        } else {
-          res.end(JSON.stringify({ 
-            _id: user._id, 
-            email: user.email, 
-            username: user.username, 
-            avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
-          }));
-        }
+        // Let's check if user approved this application.
+        helpers.getStore(token, { type: "redirect", registrat: { url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0] } })
+        .then((response) => {
+          if (response.length <= 0) {
+            res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
+          } else {
+            if (user.email == null || user.username == null) {
+              res.status(500);
+              res.end(JSON.stringify({ error: "UserNotFound" }));
+            } else {
+              res.end(JSON.stringify({ 
+                _id: user._id, 
+                email: user.email, 
+                username: user.username, 
+                avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
+              }));
+            };
+          }
+        }).catch((error) => {
+          res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
+        });
       })
       .catch(() => {
         res.status(500);
