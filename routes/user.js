@@ -92,7 +92,7 @@ router.get('/:token', (req, res) => {
           helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
           .then((response) => {
             if (response.length <= 0) {
-              res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
+              res.status(400).end(JSON.stringify({ error: "UnapprovedApplication", origin: origin }));
             } else {
               if (user.email == null || user.username == null) {
                 res.status(500);
@@ -102,7 +102,7 @@ router.get('/:token', (req, res) => {
               };
             }
           }).catch((error) => {
-            res.status(400).end(JSON.stringify({ error: "UnapprovedApplication" }));
+            res.status(400).end(JSON.stringify({ error: "UnapprovedApplication", origin: origin }));
           });
         };
       })
