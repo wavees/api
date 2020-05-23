@@ -82,7 +82,8 @@ router.get('/:token', (req, res) => {
           avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
         };
 
-        if (origin == "account.wavees.co.vu") {
+        // origin == "account.wavees.co.vu"
+        if (true) {
           if (user.email == null || user.username == null) {
             res.status(500);
             res.end(JSON.stringify({ error: "UserNotFound" }));
