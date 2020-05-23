@@ -60,8 +60,7 @@ router.get('/check/:email', (req, res) => {
 // get user
 router.get('/:token', (req, res) => {
   let token = req.params.token;
-  let origin = req.get('origin') || req.get('host');
-  origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+  let origin = req.get('origin').replace('http://','').replace('https://','').split(/[/?#]/)[0];
 
   console.log(origin);
   return res.end(JSON.stringify({ origin: origin }));
