@@ -64,6 +64,7 @@ router.get('/:token', (req, res) => {
   origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
 
   console.log(origin);
+  return res.end(JSON.stringify({ origin: origin }));
 
   helpers.getToken(token)
   .then((data) => {
