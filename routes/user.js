@@ -60,10 +60,14 @@ router.get('/check/:email', (req, res) => {
 // get user
 router.get('/:token', (req, res) => {
   let token = req.params.token;
-  let origin = req.get('origin').replace('http://','').replace('https://','').split(/[/?#]/)[0] || null;
+  let origin = req.get('origin');
+  if (origin == null) {
+    return res.status(400).end(JSON.stringify({ error: "InvalidOrigin" }));
+  };
+  origin = req.get('origin').replace('http://','').replace('https://','').split(/[/?#]/)[0];
 
-  // console.log(origin);
-  // return res.end(JSON.stringify({ origin: origin }));
+  console.log(origin);
+  return res.end(JSON.stringify({ origin: origin }));
 
   helpers.getToken(token)
   .then((data) => {
