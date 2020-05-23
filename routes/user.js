@@ -65,10 +65,7 @@ router.get('/:token', (req, res) => {
     return res.status(400).end(JSON.stringify({ error: "InvalidOrigin" }));
   };
   origin = req.get('origin').replace('http://','').replace('https://','').split(/[/?#]/)[0];
-
-  console.log(origin);
-  return res.end(JSON.stringify({ origin: origin }));
-
+  
   helpers.getToken(token)
   .then((data) => {
     if (data.data.type == "user") {
