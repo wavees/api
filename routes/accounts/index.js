@@ -239,16 +239,21 @@ router.get('/:token/applications/:origin', (req, res) => {
       .then((response) => {
         let data = response;
 
-        if (data.error == "404") {
-          res.end(JSON.stringify({}));
+        origin = origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+        if (origin == "wavees.co.vu" || origin == "account.wavees.co.vu") {
+          res.end({ agreed: true });
         } else {
-          let response = {
-            agreed: true,
+          if (data.error == "404") {
+            res.end(JSON.stringify({}));
+          } else {
+            let response = {
+              agreed: true,
 
-            registrat: data.registrat
-          };
+              registrat: data.registrat
+            };
 
-          res.end(JSON.stringify(response));
+            res.end(JSON.stringify(response));
+          }
         }
       }).catch((error) => {
         res.status(error == "InvalidToken" ? 400 : 500).end(JSON.stringify({ error: error }));
