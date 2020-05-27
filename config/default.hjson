@@ -103,43 +103,43 @@
           promotion: ""
         }
       },
-      {
-        name: "Pigeon",
+      // {
+      //   name: "Pigeon",
         
-        state: "WIP",
-        stateColor: "bg-orange-300",
+      //   state: "WIP",
+      //   stateColor: "bg-orange-300",
 
-        url: "@pigeon",
-        icon: "https://api.wavees.co.vu/logotypes/pigeon.svg",
-        description: {
-          promotion: "projects.promotions.pigeon"
-        }
-      },
-      {
-        name: "Unicorn",
+      //   url: "@pigeon",
+      //   icon: "https://api.wavees.co.vu/logotypes/pigeon.svg",
+      //   description: {
+      //     promotion: "projects.promotions.pigeon"
+      //   }
+      // },
+      // {
+      //   name: "Unicorn",
 
-        state: "WIP",
-        stateColor: "bg-orange-300",
+      //   state: "WIP",
+      //   stateColor: "bg-orange-300",
 
-        url: "@unicorn",
-        icon: "https://api.wavees.co.vu/logotypes/unicorn.svg",
-        description: {
-          promotion: "projects.promotions.unicorn"
-        }
-      },
-      {
-        name: "Paradise",
+      //   url: "@unicorn",
+      //   icon: "https://api.wavees.co.vu/logotypes/unicorn.svg",
+      //   description: {
+      //     promotion: "projects.promotions.unicorn"
+      //   }
+      // },
+      // {
+      //   name: "Paradise",
 
-        state: "@states.frozen",
-        stateColor: "bg-teal-400",
+      //   state: "@states.frozen",
+      //   stateColor: "bg-teal-400",
         
-        url: "paradiser.ml",
-        icon: "https://api.wavees.co.vu/logotypes/paradise.svg",
-        type: "noPromotion",
-        description: {
-          promotion: "projects.promotions.paradise"
-        }
-      },
+      //   url: "paradiser.ml",
+      //   icon: "https://api.wavees.co.vu/logotypes/paradise.svg",
+      //   type: "noPromotion",
+      //   description: {
+      //     promotion: "projects.promotions.paradise"
+      //   }
+      // },
       {
         // System will try to find name of this app in
         // localization files.
