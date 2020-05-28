@@ -26,19 +26,21 @@ helpers.walk('./routes', (error, files) => {
     let route = require(element);
     let filePath = path.relative(__dirname + '/routes', element);
     let url = filePath.split('.').shift();
-    
-    try {
-      if (url.includes("index")) {
-        url = path.dirname(filePath);
-      };
 
-      console.log(url);
-      app.use(`/${url == "." ? "" : url}`, route)
-    }
+    if (!url.includes("_")) {
+      try {
+        if (url.includes("index")) {
+          url = path.dirname(filePath);
+        };
 
-    // Lock at this! It's a very complicated logging system!1!!
-    catch(error) {
-      console.log(error);
+        console.log(url);
+        app.use(`/${url == "." ? "" : url}`, route)
+      }
+
+      // Lock at this! It's a very complicated logging system!1!!
+      catch(error) {
+        console.log(error);
+      }
     }
   })
 });

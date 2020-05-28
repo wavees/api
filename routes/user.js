@@ -14,7 +14,6 @@ const helpers  = {
   getToken: require('../helpers/tokens/get'),
   updateToken: require('../helpers/tokens/update'),
   
-  checkApplication: require('../applications/check.js'),
   setAvatar: require('../helpers/user/avatar'),
 
   getStore: require('../helpers/stores/get')
