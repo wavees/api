@@ -83,7 +83,7 @@ router.get('/:token', (req, res) => {
         };
 
         // origin == "account.wavees.co.vu" || origin == "wavees.co.vu"
-        if (true) {
+        if (origin == "account.wavees.co.vu" || origin == "wavees.co.vu" || origin.includes("localhost")) {
           if (user.email == null || user.username == null) {
             res.status(500);
             res.end(JSON.stringify({ error: "UserNotFound" }));

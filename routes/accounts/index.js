@@ -241,7 +241,7 @@ router.get('/:token/applications/:origin', (req, res) => {
 
         origin = origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
         if (origin == "wavees.co.vu" || origin == "account.wavees.co.vu") {
-          res.end({ agreed: true });
+          res.end(JSON.stringify({ agreed: true }));
         } else {
           if (data.error == "404") {
             res.end(JSON.stringify({}));
