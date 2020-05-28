@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
   const body = req.body;
 
   const schema = Joi.object({
-    token: Joi.string().required(),
+    token: Joi.string().optional(),
     url: Joi.string().required()
   });
 
@@ -46,63 +46,102 @@ router.post('/', (req, res) => {
     res.status(400);
     res.end(JSON.stringify({ error: "WrongPayload" }));
   } else {
-    // Let's find an application with this token...
-    helpers.getToken(body.token)
-    .then((response) => {
-      let data = response.data;
-      let id = data.id;
+    // Let's create callbackData object
+    // This object contains all callback data
+    // that are needed to create callback. 
+    let callbackData = {
+      url: body.url,
 
-      if (id == null) {
-        return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
-      } else {
-        // We found application id, so now let's
-        // find that application.
-        let query = {
-          $$storage: "applications",
-          $$findOne: true,
-
-          _id: id
-        };
-
-        helpers.getEntity(query)
-        .then((response) => {
-          // Application found, so now let's
-          // create callback itself.
-          axios.post(`${config.get('nodes.main.url')}/post/${config.get('nodes.main.key')}`,
-          {
-            $$storage: "callbacks",
-      
-            url: body.url,
-      
-            registrat: {
-              id: id,
-
-              time: new Date(),
-              origin: req.get('host')
-            }
-          })
-          .then((response) => {
-            let body = response.data;
-      
-            if (body.error) {
-              res.status(500);
-              res.end(JSON.stringify({ error: body.error }));
-            } else {
-              res.end(JSON.stringify({ id: body.document._id, url: `${config.get('callback.url')}/${body.document._id}` }));
-            }
-          }).catch(() => {
-            res.status(500);
-            res.end(JSON.stringify({ error: "NodeError" }));
-          });
-        }).catch((error) => {
-          return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "ApplicationNotFound" }));
-        });
+      registrat: {
+        id: null,
+        origin: req.get('host')
       }
-    }).catch((error) => {
-      return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
-    });
+    };
+
+    // Let's find application's origin
+    let origin = req.get('origin') || "nothing";
+    origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+
+    // Let's check request's origin
+    if (origin == "wavees.co.vu" || origin == "developers.wavees.co.vu" || origin == "api.wavees.co.vu") {
+      // This is an official wavees application.
+      createCallback(callbackData)
+      .then((response) => {
+        res.end(JSON.stringify(response));
+      }).catch(() => {
+        return res.status(500).end(JSON.stringify({ error: "ServerError" }));
+      })
+    } else {
+      // Let's find an application with this token...
+      helpers.getToken(body.token)
+      .then((response) => {
+        let data = response.data;
+        let id = data.id;
+
+        if (id == null) {
+          return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
+        } else {
+          // We found application id, so now let's
+          // find that application.
+          let query = {
+            $$storage: "applications",
+            $$findOne: true,
+
+            _id: id
+          };
+
+          helpers.getEntity(query)
+          .then((response) => {
+            // Application found, so now let's
+            // create callback itself.
+            createCallback(callbackData)
+            .then((response) => {
+              res.end(JSON.stringify(response));
+            }).catch(() => {
+              return res.status(500).end(JSON.stringify({ error: "ServerError" }));
+            })
+          }).catch((error) => {
+            return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "ApplicationNotFound" }));
+          });
+        }
+      }).catch((error) => {
+        return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
+      });
+    };
   }
 });
+
+function createCallback(data) {
+  let url = data.url;
+  let registrat = data.registrat;
+
+  return new Promise((resolve, reject) => {
+    axios.post(`${config.get('nodes.main.url')}/post/${config.get('nodes.main.key')}`,
+    {
+      $$storage: "callbacks",
+
+      url: url,
+
+      registrat: {
+        id: registrat.url,
+
+        time: new Date(),
+        origin: registrat.host
+      }
+    })
+    .then((response) => {
+      let body = response.data;
+
+      if (body.error) {
+        reject("ServerError");
+      } else {
+        resolve({ id: body.document._id, url: `${config.get('callback.url')}/${body.document._id}` });
+      }
+    }).catch(() => {
+      reject("ServerError");
+    });
+  })
+};
 
 router.get('/finish/:id/:token', (req, res) => {
   const id    = req.params.id;
