@@ -135,4 +135,38 @@ router.post('/:slug/token', (req, res) => {
   });
 });
 
+// GET
+// Get list of all user's applications
+router.get('/:token/list', (req, res) => {
+  let token = req.params.token;
+
+  // Let's check user token first.
+  helpers.getToken(token)
+  .then((response) => {
+    let data = response.data;
+
+    if (data.type == "user") {
+      // So, we found user token and now we need
+      // to find list of user's application
+      let query = {
+        $$storage: "applications",
+        $$findOne: false,
+
+        members: { $in: [ { uid: data.uid, role: "owner" } ] }
+      };
+
+      helpers.get(query)
+      .then((response) => {
+        res.end(JSON.stringify(response));
+      }).catch((error) => {
+        res.end(JSON.stringify([]));
+      })
+    } else {
+      return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
+    };
+  }).catch((error) => {
+    return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
+  })
+});
+
 module.exports = router;
