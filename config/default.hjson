@@ -37,67 +37,74 @@
       // 
       // Explanation of every project entry.
       // 
-      {
-        // Name of service
-        // If name contains "@" symbol, then system will try
-        // to find translation for this title on different
-        // languages. Very usefull, ya know.
-        name: "Bokkr",
+      // {
+      //   // Name of service
+      //   // If name contains "@" symbol, then system will try
+      //   // to find translation for this title on different
+      //   // languages. Very usefull, ya know.
+      //   name: "Bokkr",
 
-        // URL of service
-        // If it starts with "@" symbol - than system
-        // will redirect you to main domain's subdomain.
-        // For example: bokkr.wavees.co.vu in this case
-        url: "@bokkr",
+      //   // URL of service
+      //   // If it starts with "@" symbol - than system
+      //   // will redirect you to main domain's subdomain.
+      //   // For example: bokkr.wavees.co.vu in this case
+      //   url: "@bokkr",
 
-        // Icon name. All icons are stored in ./static/logotypes/
-        // And this is name of project icon.
-        icon: "https://api.wavees.co.vu/logotypes/bokkr.svg",
+      //   // Icon name. All icons are stored in ./static/logotypes/
+      //   // And this is name of project icon.
+      //   icon: "https://api.wavees.co.vu/logotypes/bokkr.svg",
 
-        // Unnecessary value. It allows us to show some projects
-        // only in promotion purposes. For example: if set to "promotion",
-        // this project will only appear on register screen and
-        // nowhere else.
+      //   // Unnecessary value. It allows us to show some projects
+      //   // only in promotion purposes. For example: if set to "promotion",
+      //   // this project will only appear on register screen and
+      //   // nowhere else.
 
-        // @values: "promotion", "noPromotion", null
-        type: null,
+      //   // @values: "promotion", "noPromotion", null
+      //   type: null,
 
-        // Project state. It allows us to show state of each project
-        // in project list.
+      //   // Project state. It allows us to show state of each project
+      //   // in project list.
 
-        // @values: "wip", "active" ...
-        state: "WIP",
-        stateColor: "bg-orange-300",
+      //   // @values: "wip", "active" ...
+      //   state: "WIP",
+      //   stateColor: "bg-orange-300",
 
-        // Different descriptions for different
-        // pages. 
-        description: { 
-          // Description of service on
-          // register page. We need to
-          // promote this app to user, don't we?
-          // 
-          // @explanation: We store all our texts
-          // in localization files. And this is path
-          // to exact this localalization.
-          promotion: "projects.promotions.bokkr"
+      //   // Different descriptions for different
+      //   // pages. 
+      //   description: { 
+      //     // Description of service on
+      //     // register page. We need to
+      //     // promote this app to user, don't we?
+      //     // 
+      //     // @explanation: We store all our texts
+      //     // in localization files. And this is path
+      //     // to exact this localalization.
+      //     promotion: "projects.promotions.bokkr"
     
-          // Probably, there will be another
-          // types of description for this
-          // project. I dunno
-        }
+      //     // Probably, there will be another
+      //     // types of description for this
+      //     // project. I dunno
+      //   }
 
-        // 
-        // Meaning of this objects explained there ⬆
-        //
-      },
+      //   // 
+      //   // Meaning of this objects explained there ⬆
+      //   //
+      // },
       {
         name: "Timey",
 
-        state: "BETA",
-        stateColor: "bg-red-400",
-        
         url: "timey.wavees.co.vu",
         icon: "https://api.wavees.co.vu/logotypes/timey.svg",
+        type: "noPromotion",
+        description: {
+          promotion: ""
+        }
+      },
+      {
+        name: "Ideas",
+
+        url: "ideas.wavees.co.vu",
+        icon: "https://api.wavees.co.vu/logotypes/ideas.svg",
         type: "noPromotion",
         description: {
           promotion: ""
