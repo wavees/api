@@ -46,68 +46,53 @@ router.post('/', (req, res) => {
     res.status(400);
     res.end(JSON.stringify({ error: "WrongPayload" }));
   } else {
-    // Let's create callbackData object
-    // This object contains all callback data
-    // that are needed to create callback. 
-    let callbackData = {
-      url: body.url,
+    // Let's find an application with this token...
+    helpers.getToken(body.token)
+    .then((response) => {
+      let data = response.data;
+      let id = data.id;
 
-      registrat: {
-        id: null,
-        origin: req.get('host')
-      }
-    };
+      if (id == null) {
+        return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
+      } else {
+        // We found application id, so now let's
+        // find that application.
+        let query = {
+          $$storage: "applications",
+          $$findOne: true,
 
-    // Let's find application's origin
-    let origin = req.get('origin') || "nothing";
-    origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+          _id: id
+        };
 
-    // Let's check request's origin
-    if (origin == "wavees.co.vu" || origin == "developers.wavees.co.vu" || origin == "api.wavees.co.vu") {
-      // This is an official wavees application.
-      createCallback(callbackData)
-      .then((response) => {
-        res.end(JSON.stringify(response));
-      }).catch(() => {
-        return res.status(500).end(JSON.stringify({ error: "ServerError" }));
-      })
-    } else {
-      // Let's find an application with this token...
-      helpers.getToken(body.token)
-      .then((response) => {
-        let data = response.data;
-        let id = data.id;
+        // Let's create callbackData object
+        // This object contains all callback data
+        // that are needed to create callback. 
+        let callbackData = {
+          url: body.url,
 
-        if (id == null) {
-          return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
-        } else {
-          // We found application id, so now let's
-          // find that application.
-          let query = {
-            $$storage: "applications",
-            $$findOne: true,
+          registrat: {
+            id: null,
+            origin: req.get('host')
+          }
+        };
 
-            _id: id
-          };
-
-          helpers.getEntity(query)
+        helpers.getEntity(query)
+        .then((response) => {
+          // Application found, so now let's
+          // create callback itself.
+          createCallback(callbackData)
           .then((response) => {
-            // Application found, so now let's
-            // create callback itself.
-            createCallback(callbackData)
-            .then((response) => {
-              res.end(JSON.stringify(response));
-            }).catch(() => {
-              return res.status(500).end(JSON.stringify({ error: "ServerError" }));
-            })
-          }).catch((error) => {
-            return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "ApplicationNotFound" }));
-          });
-        }
-      }).catch((error) => {
-        return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
-      });
-    };
+            res.end(JSON.stringify(response));
+          }).catch(() => {
+            return res.status(500).end(JSON.stringify({ error: "ServerError" }));
+          })
+        }).catch((error) => {
+          return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "ApplicationNotFound" }));
+        });
+      }
+    }).catch((error) => {
+      return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
+    });
   }
 });
 

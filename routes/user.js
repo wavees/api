@@ -82,31 +82,21 @@ router.get('/:token', (req, res) => {
           avatar: user.avatar == null ? null : `${config.get('api.avatars')}/${user.avatar}`
         };
 
-        // origin == "account.wavees.co.vu" || origin == "wavees.co.vu"
-        if (origin == "account.wavees.co.vu" || origin == "wavees.co.vu" || origin.includes("localhost")) {
-          if (user.email == null || user.username == null) {
-            res.status(500);
-            res.end(JSON.stringify({ error: "UserNotFound" }));
-          } else {
-            res.end(JSON.stringify(object));
-          };
-        } else {
-          helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
-          .then((response) => {
-            if (response.length <= 0) {
-              res.status(400).end(JSON.stringify({ error: "UnapprovedApplication", origin: origin }));
-            } else {
-              if (user.email == null || user.username == null) {
-                res.status(500);
-                res.end(JSON.stringify({ error: "UserNotFound" }));
-              } else {
-                res.end(JSON.stringify(object));
-              };
-            }
-          }).catch((error) => {
+        helpers.getStore(token, { type: "redirect", registrat: { url: origin } })
+        .then((response) => {
+          if (response.length <= 0) {
             res.status(400).end(JSON.stringify({ error: "UnapprovedApplication", origin: origin }));
-          });
-        };
+          } else {
+            if (user.email == null || user.username == null) {
+              res.status(500);
+              res.end(JSON.stringify({ error: "UserNotFound" }));
+            } else {
+              res.end(JSON.stringify(object));
+            };
+          }
+        }).catch((error) => {
+          res.status(400).end(JSON.stringify({ error: "UnapprovedApplication", origin: origin }));
+        });
       })
       .catch(() => {
         res.status(500);
