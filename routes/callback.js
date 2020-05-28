@@ -80,6 +80,7 @@ router.post('/', (req, res) => {
         .then((response) => {
           // Application found, so now let's
           // create callback itself.
+          callbackData.registrat.id = response._id;
           createCallback(callbackData)
           .then((response) => {
             res.end(JSON.stringify(response));
@@ -108,7 +109,7 @@ function createCallback(data) {
       url: url,
 
       registrat: {
-        id: registrat.url,
+        id: registrat.id,
 
         time: new Date(),
         origin: registrat.host
@@ -120,6 +121,8 @@ function createCallback(data) {
       if (body.error) {
         reject("ServerError");
       } else {
+        console.log("NEW CALLBACK:");
+        console.log(body);
         resolve({ id: body.document._id, url: `${config.get('callback.url')}/${body.document._id}` });
       }
     }).catch(() => {
@@ -169,16 +172,15 @@ router.get('/finish/:id/:token', (req, res) => {
                 // Let's check for dislaimer
                 let query = { 
                   type: "redirect",
-                  registrat: {
-                    url: callback.url.replace('http://','').replace('https://','').split(/[/?#]/)[0]
-                  }
+                  appId: callback.registrat.id
                 };
-
+                
                 helpers.getStore(token, query)
                 .then((response) => {
                   if (response.length <= 0) {
                     // Create new user store for that domain/subdomain...
                     query.time = new Date();
+
                     helpers.createStore(token, query)
                   }
                 });

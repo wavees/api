@@ -219,9 +219,9 @@ router.get('/:token', (req, res) => {
 // 
 // 
 // 
-router.get('/:token/applications/:origin', (req, res) => {
+router.get('/:token/application/:id', (req, res) => {
   let token  = req.params.token;
-  let origin = req.params.origin;
+  let id = req.params.id;
 
   helpers.getToken(token)
   .then((data) => {
@@ -231,29 +231,22 @@ router.get('/:token/applications/:origin', (req, res) => {
         $$findOne: true,
 
         type: "redirect",
-        registrat: {
-          url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0]
-        }
+        appId: id
       };
       helpers.getStore(token, query)
       .then((response) => {
         let data = response;
 
-        origin = origin.replace('http://','').replace('https://','').split(/[/?#]/)[0];
-        if (origin == "wavees.co.vu" || origin == "account.wavees.co.vu") {
-          res.end(JSON.stringify({ agreed: true }));
+        if (data.error == "404") {
+          res.end(JSON.stringify({}));
         } else {
-          if (data.error == "404") {
-            res.end(JSON.stringify({}));
-          } else {
-            let response = {
-              agreed: true,
+          let response = {
+            agreed: true,
 
-              registrat: data.registrat
-            };
+            registrat: data.registrat
+          };
 
-            res.end(JSON.stringify(response));
-          }
+          res.end(JSON.stringify(response));
         }
       }).catch((error) => {
         res.status(error == "InvalidToken" ? 400 : 500).end(JSON.stringify({ error: error }));
@@ -276,12 +269,19 @@ router.get('/:token/applications', (req, res) => {
 
     if (data.type == "user") {
       let query = {
-        type: "redirect",
+        type: "redirect"
       };
 
       helpers.getStore(token, query)
       .then((response) => {
-        res.end(JSON.stringify(response));
+        let applications = [];
+        response.forEach((obj) => {
+          if (obj.appId != null) {
+            applications.push(obj);
+          }
+        });
+
+        res.end(JSON.stringify(applications));
       }).catch((error) => {
         res.status(error == "InvalidToken" ? 400 : 500).end(JSON.stringify({ error }));
       })
@@ -293,9 +293,9 @@ router.get('/:token/applications', (req, res) => {
   })
 });
 
-router.delete('/:token/application/:origin', (req, res) => {
+router.delete('/:token/application/:id', (req, res) => {
   let token = req.params.token;
-  let origin = req.params.origin;
+  let id = req.params.id;
   
   helpers.getToken(token)
   .then((response) => {
@@ -304,9 +304,7 @@ router.delete('/:token/application/:origin', (req, res) => {
     if (data.type == "user") {
       // Let's delete this store.
       let query = {
-        registrat: {
-          url: origin.replace('http://','').replace('https://','').split(/[/?#]/)[0]
-        }
+        appId: id
       };
       helpers.deleteStore(token, query)
       .then((response) => {
