@@ -29,6 +29,14 @@
     list: []
   },
 
+  permissions: {
+    default: [
+      "readEmail",
+      "readAvatar",
+      "readUsername"
+    ]
+  },
+
   // 
   // 
   // 
