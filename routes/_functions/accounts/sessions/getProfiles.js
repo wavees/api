@@ -30,7 +30,7 @@ module.exports = (token) => {
         let profiles = data.profiles;
 
         if (profiles.length > 0) {
-          resolve({ current: data.current, profiles: profiles });
+          resolve({ type: "session", current: data.current, profiles: profiles });
         } else {
           reject({ error: "NotFound" });
         }

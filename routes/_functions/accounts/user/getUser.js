@@ -48,6 +48,9 @@ module.exports = (token) => {
             // according to token's permissions.
             let profile = {};
 
+            // Let's set the type of this object
+            profile.type = "user";
+
             // @permission: readEmail
             profile.email    = permissions.has("readEmail") ? data.email : null;
 
