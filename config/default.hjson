@@ -98,16 +98,16 @@
         // Meaning of this objects explained there ⬆
         //
       },
-      {
-        name: "Ideas",
+      // {
+      //   name: "Ideas",
 
-        url: "ideas.wavees.co.vu",
-        icon: "https://api.wavees.co.vu/logotypes/ideas.svg",
-        type: "noPromotion",
-        description: {
-          promotion: ""
-        }
-      },
+      //   url: "ideas.wavees.co.vu",
+      //   icon: "https://api.wavees.co.vu/logotypes/ideas.svg",
+      //   type: "noPromotion",
+      //   description: {
+      //     promotion: ""
+      //   }
+      // },
     ]
   }
 }

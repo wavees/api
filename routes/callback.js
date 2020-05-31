@@ -171,7 +171,7 @@ router.get('/finish/:id/:token', (req, res) => {
               .then((data) => {
                 // Let's check for dislaimer
                 let query = { 
-                  type: "redirect",
+                  type: "approvedApplication",
                   appId: callback.registrat.id
                 };
                 

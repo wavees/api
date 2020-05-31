@@ -7,8 +7,9 @@ const config  = require('config');
 
 // Helpers
 const helpers = {
-  permissions: require('../../../../helpers/permissions/index'),
-  getToken: require('../../../../helpers/tokens/get')
+  getToken: require('../../../../helpers/tokens/get'),
+
+  getUser: require('../user/getUser')
 };
 
 // @section export
@@ -36,51 +37,11 @@ module.exports = (token) => {
       } else if (data.type == "user") {
         // It's an user
 
-        // Let's read this token's permissions
-        let permissions
-        if (data.permissions == null) {
-          permissions = helpers.permissions(config.get('permissions.default'));
-        } else {
-          permissions = helpers.permissions(data.permissions);
-        }
-
-        // Now we need to get this user
-        // object and return it. 
-        let query = {
-          $$storage: "users",
-          $$findOne: true,
-
-          _id: data.uid
-        };
-
-        axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
+        helpers.getUser(token)
         .then((response) => {
-          let data = response.data;
-
-          if (data.error != "404") {
-            // Now we need to filter this response
-            // according to token's permissions.
-            let profile = {};
-
-            // @permission: readEmail
-            profile.email    = permissions.has("readEmail") ? data.email : null;
-
-            // @permission: readAvatar
-            profile.avatar   = permissions.has("readAvatar") ? `${config.get('api.avatars')}/${data.avatar}` : null;
-
-            // @permission: readUsername
-            profile.username = permissions.has("readUsername") ? data.username : null;
-
-            // @uid
-            profile.uid = data._id;
-
-            resolve(profile);
-          } else {
-            reject({ error: "InvalidToken" });
-          }
+          resolve(response);
         }).catch((error) => {
-          console.log(error);
-          reject({ error: "ServerError" });
+          reject(error);
         });
       } else {
         reject({ error: "InvalidToken" });
