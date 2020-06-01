@@ -13,7 +13,8 @@ const helpers = {
   createStore: require('../helpers/stores/create'),
   getStore: require('../helpers/stores/get'),
 
-  getEntity: require('../helpers/entities/get')
+  getEntity: require('../helpers/entities/get'),
+  getApplication: require('./_functions/applications/getApplication')
 };
 
 router.get('/:id', (req, res) => {
@@ -55,15 +56,6 @@ router.post('/', (req, res) => {
       if (id == null) {
         return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
       } else {
-        // We found application id, so now let's
-        // find that application.
-        let query = {
-          $$storage: "applications",
-          $$findOne: true,
-
-          _id: id
-        };
-
         // Let's create callbackData object
         // This object contains all callback data
         // that are needed to create callback. 
@@ -76,22 +68,27 @@ router.post('/', (req, res) => {
           }
         };
 
-        helpers.getEntity(query)
+        // We found application id, so now let's
+        // find that application.
+        
+        helpers.getApplication(id)
         .then((response) => {
           // Application found, so now let's
           // create callback itself.
-          callbackData.registrat.id = response._id;
+          callbackData.registrat.id = response.id;
+
           createCallback(callbackData)
           .then((response) => {
             res.end(JSON.stringify(response));
           }).catch(() => {
             return res.status(500).end(JSON.stringify({ error: "ServerError" }));
           })
-        }).catch((error) => {
-          return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "ApplicationNotFound" }));
+        }).catch(() => {
+          return res.status(404).end(JSON.stringify({ error: "ApplicationNotFound" }));
         });
       }
     }).catch((error) => {
+      console.log(error);
       return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
     });
   }
