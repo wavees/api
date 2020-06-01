@@ -36,7 +36,7 @@ module.exports = (appId) => {
         application.name     = data.name;
 
           // +Logotype
-        application.logotype = data.logotype;
+        application.logotype = `${config.get('api.avatars')}/${data.logotype}`;
 
         resolve(application);
       } else {
