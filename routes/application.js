@@ -1,4 +1,5 @@
 const router  = require('express').Router();
+const axios = require('axios');
 const config  = require('config');
 
 const Joi     = require('@hapi/joi');
@@ -87,12 +88,24 @@ router.get('/:token/list', (req, res) => {
         members: { $in: [ { uid: data.uid, role: "owner" } ] }
       };
 
-      helpers.get(query)
+      axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
       .then((response) => {
-        res.end(JSON.stringify(response));
+        let data = response.data;
+
+        if (data.error != "404") {
+          res.end(JSON.stringify(data));
+        } else {
+          res.end(JSON.stringify([]));
+        }
       }).catch((error) => {
         res.end(JSON.stringify([]));
-      })
+      });
+      // helpers.get(query)
+      // .then((response) => {
+      //   res.end(JSON.stringify(response));
+      // }).catch((error) => {
+      //   res.end(JSON.stringify([]));
+      // })
     } else {
       return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
     };
