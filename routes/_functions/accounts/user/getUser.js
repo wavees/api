@@ -24,10 +24,10 @@ module.exports = (token) => {
       if (data.type == "user") {
         // Let's read this token's permissions
         let permissions = config.get('permissions.default');
-        if (user.permissions == null) {
+        if (data.permissions == null) {
           permissions = helpers.permissions(permissions);
         } else {
-          permissions = helpers.permissions(permissions.push(user.permissions));
+          permissions = helpers.permissions(permissions.push(data.permissions));
         };
 
         // Now we need to get this user
@@ -67,12 +67,11 @@ module.exports = (token) => {
           } else {
             reject({ error: "InvalidToken" });
           }
-        }).catch((error) => {
-          console.log(error);
+        }).catch(() => {
           reject({ error: "ServerError" });
         });
       }
-    }).catch(() => {
+    }).catch((error) => {
       reject({ error: "InvalidToken" });
     });
   });
