@@ -33,7 +33,10 @@
     default: [
       "readEmail",
       "readAvatar",
-      "readUsername"
+      "readUsername",
+
+      "changeUsername",
+      "getTokens"
     ]
   },
 

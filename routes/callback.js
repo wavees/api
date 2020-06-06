@@ -159,7 +159,6 @@ router.get('/finish/:id/:token', (req, res) => {
               // Delete callback...
             } else {
               // Create user token...
-
               helpers.createToken({ 
                 uid: data.data.uid, 
                 type: "user", 

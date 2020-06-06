@@ -21,7 +21,10 @@ const functions = {
     // 
     getApprovedApplications: require('../_functions/accounts/user/userApplications/getList'),
     checkApproveApplication: require('../_functions/accounts/user/userApplications/checkApplication'),
-    deleteApprovedApplication: require('../_functions/accounts/user/userApplications/deleteApplication')
+    deleteApprovedApplication: require('../_functions/accounts/user/userApplications/deleteApplication'),
+
+    changeUsername: require('../_functions/accounts/user/changeUsername.js'),
+    getTokens: require('../_functions/accounts/user/getTokens')
   }
 };
 
@@ -52,7 +55,7 @@ router.post('/', (req, res) => {
   });
 });
 
-// @route getProfiles
+// @route getProfile
 // @method GET
 // @function .../getProfiles.js
 
@@ -107,6 +110,47 @@ router.delete('/:session/:token', (req, res) => {
   .catch((error) => {
     res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
   });
+});
+
+// @section User account
+// All things, related to
+// user account.
+
+// @route getTokens
+// @method GET
+// @function .../
+
+router.get('/:token/tokens', (req, res) => {
+  let token = req.params.token;
+
+  // Here we'll call function, that'll get all
+  // user tokens from database.
+  functions.user.getTokens(token)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
+  })
+});
+
+// @route changeUsername
+// @method POST
+// @function .../
+
+router.post('/:token/username', (req, res) => {
+  let token    = req.params.token;
+  let username = req.body.username;
+
+  if (username == null) return res.status(400).end(JSON.stringify({ error: "InvalidPayload" }));
+
+  // Let's call this function and then return
+  // response.
+  functions.user.changeUsername(token, username)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
+  })
 });
 
 // @route getApprovedApplications

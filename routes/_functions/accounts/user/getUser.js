@@ -23,12 +23,12 @@ module.exports = (token) => {
 
       if (data.type == "user") {
         // Let's read this token's permissions
-        let permissions
-        if (data.permissions == null) {
-          permissions = helpers.permissions(config.get('permissions.default'));
+        let permissions = config.get('permissions.default');
+        if (user.permissions == null) {
+          permissions = helpers.permissions(permissions);
         } else {
-          permissions = helpers.permissions(data.permissions);
-        }
+          permissions = helpers.permissions(permissions.push(user.permissions));
+        };
 
         // Now we need to get this user
         // object and return it. 
