@@ -4,6 +4,7 @@
 
 const helpers = {
   getToken: require('../../../../../helpers/tokens/get'),
+  deleteToken: require('../../../../../helpers/tokens/delete'),
 
   getStore: require('../../../../../helpers/stores/get'),
   deleteStore: require('../../../../../helpers/stores/delete')
@@ -31,11 +32,24 @@ module.exports = (token, appId) => {
         helpers.deleteStore(token, query)
         .then((response) => {
           if (response.deletedCount > 0) {
+            // And now, by the way, we need to delete
+            // all application's tokens
+            
+            let query = {
+              $$storage: "tokens",
+              $$multi: true,
+              "data.uid": data.uid,
+              "data.registrat.id": appId
+            };
+            helpers.deleteToken(query);
+            
             resolve({ deleted: true });
           } else {
             reject({ error: "NothingDeleted" });
           }
-        }).catch(() => {
+        }).catch((error) => {
+          console.log('2');
+          console.log(error);
           reject({ error: "ServerError" });
         });
       } else {
