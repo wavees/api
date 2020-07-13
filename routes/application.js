@@ -70,48 +70,48 @@ router.post('/', (req, res) => {
 
 // GET
 // Get list of all user's applications
-router.get('/:token/list', (req, res) => {
-  let token = req.params.token;
+// router.get('/:token/list', (req, res) => {
+//   let token = req.params.token;
 
-  // Let's check user token first.
-  helpers.getToken(token)
-  .then((response) => {
-    let data = response.data;
+//   // Let's check user token first.
+//   helpers.getToken(token)
+//   .then((response) => {
+//     let data = response.data;
 
-    if (data.type == "user") {
-      // So, we found user token and now we need
-      // to find list of user's application
-      let query = {
-        $$storage: "applications",
-        $$findOne: false,
+//     if (data.type == "user") {
+//       // So, we found user token and now we need
+//       // to find list of user's application
+//       let query = {
+//         $$storage: "applications",
+//         $$findOne: false,
 
-        members: { $in: [ { uid: data.uid, role: "owner" } ] }
-      };
+//         members: { $in: [ { uid: data.uid, role: "owner" } ] }
+//       };
 
-      axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
-      .then((response) => {
-        let data = response.data;
+//       axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
+//       .then((response) => {
+//         let data = response.data;
 
-        if (data.error != "404") {
-          res.end(JSON.stringify(data));
-        } else {
-          res.end(JSON.stringify([]));
-        }
-      }).catch((error) => {
-        res.end(JSON.stringify([]));
-      });
-      // helpers.get(query)
-      // .then((response) => {
-      //   res.end(JSON.stringify(response));
-      // }).catch((error) => {
-      //   res.end(JSON.stringify([]));
-      // })
-    } else {
-      return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
-    };
-  }).catch((error) => {
-    return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
-  })
-});
+//         if (data.error != "404") {
+//           res.end(JSON.stringify(data));
+//         } else {
+//           res.end(JSON.stringify([]));
+//         }
+//       }).catch((error) => {
+//         res.end(JSON.stringify([]));
+//       });
+//       // helpers.get(query)
+//       // .then((response) => {
+//       //   res.end(JSON.stringify(response));
+//       // }).catch((error) => {
+//       //   res.end(JSON.stringify([]));
+//       // })
+//     } else {
+//       return res.status(400).end(JSON.stringify({ error: "InvalidToken" }));
+//     };
+//   }).catch((error) => {
+//     return res.status(error == "NotFound" ? 404 : 500).end(JSON.stringify({ error: "InvalidToken" }));
+//   })
+// });
 
 module.exports = router;
