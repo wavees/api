@@ -2,7 +2,7 @@
   // 
   api: {
     url: "https://api.wavees.co.vu",
-    avatars: "https://gwi.glitch.me"
+    avatars: "http://35.228.254.172:3001/files/get"
   },
 
   // 
