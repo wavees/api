@@ -224,6 +224,6 @@ router.get('/:token/applications', (req, res) => {
   }).catch((error) => {
     res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
   })
-})
+});
 
 module.exports = router;

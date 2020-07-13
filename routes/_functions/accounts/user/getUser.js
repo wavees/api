@@ -13,66 +13,80 @@ const helpers = {
 // @section export
 // And now we need to export function,
 // that'll handle this action.
-module.exports = (token) => {
+module.exports = (identifier, type = "token") => {
   // Let's return promise...
 
   return new Promise((resolve, reject) => {
-    helpers.getToken(token)
-    .then((response) => {
-      let data = response.data;
+    let permissions = config.get('permissions.default');
+    let uid = identifier;
 
-      if (data.type == "user") {
-        // Let's read this token's permissions
-        let permissions = config.get('permissions.default');
-        if (data.permissions == null) {
-          permissions = helpers.permissions(permissions);
+    // @type token
+    if (type == "token") {
+      helpers.getToken(identifier)
+      .then((response) => {
+        let data = response.data;
+
+        if (data.type == "user") {
+          // Let's read this token's permissions
+          if (data.permissions != null) {
+            permissions.push(data.permissions);
+          };
+
+          uid = data.uid;
+
+          getUser();
+        }
+      }).catch((error) => {
+        reject({ error: "InvalidToken" });
+      });
+    } else {
+      getUser();
+    }
+
+    function getUser() {
+      // Let's now prepare permission object..
+      permissions = helpers.permissions(permissions);
+
+      // And now let's just get this user
+      // and return information about it.
+      let query = {
+        $$storage: "users",
+        $$findOne: true,
+
+        _id: uid || identifier
+      };
+
+      axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
+      .then((response) => {
+        let data = response.data;
+
+        if (data.error != "404") {
+          // Now we need to filter this response
+          // according to token's permissions.
+          let profile = {};
+
+          // Let's set the type of this object
+          profile.type = "user";
+
+          // @permission: readEmail
+          profile.email    = permissions.has("readEmail") ? data.email : null;
+
+          // @permission: readAvatar
+          profile.avatar   = permissions.has("readAvatar") ? `${config.get('api.avatars')}/${data.avatar}` : null;
+
+          // @permission: readUsername
+          profile.username = permissions.has("readUsername") ? data.username : null;
+
+          // @uid
+          profile.uid = data._id;
+
+          resolve(profile);
         } else {
-          permissions = helpers.permissions(permissions.push(data.permissions));
-        };
-
-        // Now we need to get this user
-        // object and return it. 
-        let query = {
-          $$storage: "users",
-          $$findOne: true,
-
-          _id: data.uid
-        };
-
-        axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
-        .then((response) => {
-          let data = response.data;
-
-          if (data.error != "404") {
-            // Now we need to filter this response
-            // according to token's permissions.
-            let profile = {};
-
-            // Let's set the type of this object
-            profile.type = "user";
-
-            // @permission: readEmail
-            profile.email    = permissions.has("readEmail") ? data.email : null;
-
-            // @permission: readAvatar
-            profile.avatar   = permissions.has("readAvatar") ? `${config.get('api.avatars')}/${data.avatar}` : null;
-
-            // @permission: readUsername
-            profile.username = permissions.has("readUsername") ? data.username : null;
-
-            // @uid
-            profile.uid = data._id;
-
-            resolve(profile);
-          } else {
-            reject({ error: "InvalidToken" });
-          }
-        }).catch(() => {
-          reject({ error: "ServerError" });
-        });
-      }
-    }).catch((error) => {
-      reject({ error: "InvalidToken" });
-    });
+          reject({ error: "InvalidToken" });
+        }
+      }).catch(() => {
+        reject({ error: "ServerError" });
+      });
+    };
   });
 };

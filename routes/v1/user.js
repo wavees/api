@@ -19,6 +19,21 @@ const helpers  = {
   getStore: require('../../helpers/stores/get')
 };
 
+router.get('/:id', (req, res) => {
+  let uid = req.params.id;
+
+  // Let's now just get this user
+  // object and then let's return
+  // it to "requester".
+
+  require('../_functions/accounts/user/getUser')(uid, "uid")
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error == "ServerError" ? 500 : 404).end(JSON.stringify({ error: error }));
+  });
+});
+
 router.get('/validate/:email', (req, res) => {
   let email = req.params.email;
   
