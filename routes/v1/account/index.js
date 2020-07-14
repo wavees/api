@@ -145,8 +145,6 @@ router.get('/:id/medals/list', (req, res) => {
   });
 });
 
-// @route getMedalInfo
-
 // @route agree/disagee to Medal
 
 router.put('/:token/medal/:id/shift', (req, res) => {
