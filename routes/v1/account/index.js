@@ -27,7 +27,19 @@ const functions = {
     getTokens: require('../../_functions/accounts/user/getTokens'),
 
     getAllApplications: require('../../_functions/accounts/user/applications/getList.js')
+  },
+  
+  medals: {
+    getUserMedals: require('../../_functions/accounts/medals/getUserMedals'),
+
+    createMedal: require('../../_functions/accounts/medals/createMedal'),
+    shifter: require('../../_functions/accounts/medals/shifter')
   }
+};
+
+
+const helpers = {
+  retrieveCoins: require('../../../helpers/coins/retrieve')
 };
 
 
@@ -116,6 +128,77 @@ router.delete('/:session/:token', (req, res) => {
 // @section User account
 // All things, related to
 // user account.
+
+// @route getMedals
+// @method GET
+// @function ../
+router.get('/:id/medals/list', (req, res) => {
+  let id = req.params.id;
+
+  // And now let's just call function, that'll
+  // return our response.
+  functions.medals.getUserMedals(id)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
+  });
+});
+
+// @route getMedalInfo
+
+// @route agree/disagee to Medal
+
+router.put('/:token/medal/:id/shift', (req, res) => {
+  // Let's firstly get our user token
+  // and medal id.
+  let token     = req.params.token;
+  let id        = req.params.id;
+
+  // And now let's just call Shifter function.
+  functions.medals.shifter(token, id)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
+  });
+});
+
+// @route createMedal
+// @method POST
+// @function ../
+router.post('/:token/medals', (req, res) => {
+  let token = req.params.token;
+  let body  = req.body;
+
+  // And now let's just call specific function,
+  // that'll try to create this medal.
+  functions.medals.createMedal(token, body)
+  .then((response) => {
+    res.end(JSON.stringify(response))
+  }).catch((error) => {
+    res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
+  });
+});
+
+// @route getCoins
+// @method GET
+// @function HERE
+router.get('/:id/coins', (req, res) => {
+  let id = req.params.id;
+
+  // So now we just need to retrieve
+  // user coins and return them.
+  helpers.retrieveCoins(id)
+  .then((response) => {
+    let coins = response;
+
+    // And now let's just return an response...
+    res.end(JSON.stringify({ coins }));
+  }).catch((error) => {
+    res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
+  })
+});
 
 // @route getTokens
 // @method GET

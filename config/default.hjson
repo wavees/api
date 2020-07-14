@@ -36,7 +36,10 @@
       "readUsername",
 
       "changeUsername",
-      "getTokens"
+      "getTokens",
+      
+      "createMedal",
+      "shiftMedal"
     ]
   },
 
