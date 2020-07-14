@@ -41,10 +41,8 @@ router.get('/validate/:email', (req, res) => {
   axios.get(`https://emailverification.whoisxmlapi.com/api/v1?apiKey=${config.get('email.verifyKey')}&emailAddress=${email}`)
   .then((response) => {
     if (response.data.smtpCheck == "true") {
-      console.log("VALID");
       res.end(JSON.stringify({ valid: true, error: null }));
     } else {
-      console.log("INVALID");
       res.end(JSON.stringify({ valid: false, error: "invalidEmail" }));
     }
   }).catch((error) => {
@@ -55,7 +53,7 @@ router.get('/validate/:email', (req, res) => {
 
 // check user
 router.get('/check/:email', (req, res) => {
-  axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","email":"${req.params.email}"}`)
+  axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","email":"${req.params.email.toLowerCase()}"}`)
   .then((response) => {
     let body = response.data;
     

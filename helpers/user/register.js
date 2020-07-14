@@ -37,7 +37,7 @@ module.exports = (user) => {
     if (validation.error != null) reject("WrongPayload");
     
     // {"$$findOne":true,"$$storage":"users","email":"${user.email}"}
-    axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","email":"${user.email}"}`)
+    axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/{"$$findOne":true,"$$storage":"users","email":"${user.email.toLowerCase()}"}`)
     .then((response) => {
       let data = response.data;
 
@@ -57,7 +57,7 @@ module.exports = (user) => {
               $$storage: "users",
 
               username: user.username,
-              email: user.email,
+              email: user.email.toLowerCase(),
 
               pincode: user.pincode
             })
