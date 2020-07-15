@@ -37,6 +37,8 @@
 
       "changeUsername",
       "getTokens",
+
+      "getCoins",
       
       "createMedal",
       "shiftMedal"

@@ -77,6 +77,9 @@ module.exports = (identifier, type = "token") => {
           // @permission: readUsername
           profile.username = permissions.has("readUsername") ? data.username : null;
 
+          // @permission: getCoins
+          profile.coins    = permissions.has("getCoins") ? data.coins == null ? 100 : data.coins : null;
+
           // @uid
           profile.uid = data._id;
 
