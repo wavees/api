@@ -2,7 +2,7 @@
   // 
   api: {
     url: "https://api.wavees.co.vu",
-    avatars: "http://35.228.254.172:3001/files/get"
+    avatars: "https://fog-dull-pomelo.glitch.me/"
   },
 
   // 
@@ -51,22 +51,22 @@
       // 
       // Explanation of every project entry.
       // 
-      {
+      //{
         // Name of service
         // If name contains "@" symbol, then system will try
         // to find translation for this title on different
         // languages. Very usefull, ya know.
-        name: "Timey",
+      //  name: "Timey",
 
         // URL of service
         // If it starts with "@" symbol - than system
         // will redirect you to main domain's subdomain.
         // For example: bokkr.wavees.co.vu in this case
-        url: "@timey",
+      //  url: "@timey",
 
         // Icon name. All icons are stored in ./static/logotypes/
         // And this is name of project icon.
-        icon: "https://api.wavees.co.vu/logotypes/timey.svg",
+      //  icon: "https://api.wavees.co.vu/logotypes/timey.svg",
 
         // Unnecessary value. It allows us to show some projects
         // only in promotion purposes. For example: if set to "promotion",
@@ -74,18 +74,18 @@
         // nowhere else.
 
         // @values: "promotion", "noPromotion", null
-        type: "noPromotion",
+      //  type: "noPromotion",
 
         // Project state. It allows us to show state of each project
         // in project list.
 
         // @values: "wip", "active" ...
-        state: "",
-        stateColor: "",
+      //  state: "",
+      //  stateColor: "",
 
         // Different descriptions for different
         // pages. 
-        description: { 
+      //  description: { 
           // Description of service on
           // register page. We need to
           // promote this app to user, don't we?
@@ -93,17 +93,17 @@
           // @explanation: We store all our texts
           // in localization files. And this is path
           // to exact this localalization.
-          promotion: ""
+      //    promotion: ""
     
           // Probably, there will be another
           // types of description for this
           // project. I dunno
-        }
+      //  }
 
         // 
         // Meaning of this objects explained there ⬆
         //
-      },
+      //},
       // {
       //   name: "Ideas",
 
