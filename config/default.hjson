@@ -1,7 +1,7 @@
 {
   // 
   api: {
-    url: "https://api.wavees.co.vu",
+    url: "https://api.wavees.ml",
     avatars: "https://fog-dull-pomelo.glitch.me/"
   },
 
@@ -11,7 +11,7 @@
   // => callback.url - URL to callback page
 
   callback: {
-    url: "https://account.wavees.co.vu/authorize"
+    url: "https://account.wavees.ml/authorize"
   },
 
   // 
