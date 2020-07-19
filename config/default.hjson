@@ -23,7 +23,7 @@
   // 
   nodes: {
     main: {
-      url: "http://35.228.254.172:3001",
+      url: "http://europe-north-a2.wnode.ml",
       key: "hellothere"
     },
     list: []
