@@ -1,19 +1,43 @@
+# 
+# @section Building and Deploying
+# API's
+# @description Here we'll build and
+# deploy each API. And yes, these all
+# are different APIs and different
+# services, that'll run on different
+# domains. (subdomains)
 steps:
-  # Build the container image (Global Region: us-west1)
+  
+  # 
+  # @api Global
+  # Let's now build our global API
+  # and push it to Artifact Registry.
+  # 
+  # @region us-west1
+  # @
+  
+  # Building container
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/api:$COMMIT_SHA', '.']
-  # Push the container image to Artifact Registry (Global Region: us-west1)
+    args: ['build', '-t', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA', 'global']
+  # Pushing it to Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/api:$COMMIT_SHA']
+    args: ['push', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA']
 
-  # Deploy container image to Cloud Run (Region: europe-west1)
+  # 
+  # @section Deployment
+  # Here we'll deploy all docker images
+  # and services to Google Cloud Run
+  #  
+
+  # @service Global API
+  # @region europe-west1
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
     - 'run'
     - 'deploy'
     - 'api-europe'
     - '--image'
-    - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/api:$COMMIT_SHA'
+    - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA'
     - '--region'
     - 'europe-west1'
     - '--platform'
@@ -21,4 +45,4 @@ steps:
     - '--allow-unauthenticated'
 
 images:
-  - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/api:$COMMIT_SHA'
+  - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA'
