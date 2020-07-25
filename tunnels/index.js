@@ -32,6 +32,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-app.listen(process.env.PORT || 8080, () => {
+const listener = app.listen(process.env.PORT || 8080, () => {
   console.log("[app] Started Tunnels API Application on port " + listener.address().port);
 });
