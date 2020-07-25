@@ -6,8 +6,6 @@ const helpers    = {
   walk: require('./helpers/walk')
 };
 
-let { PORT } = process.env;
-
 app.use(bodyParser.json());
 
 // And now let's load all our routes...
@@ -34,4 +32,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-app.listen(PORT = 3000);
+app.listen(process.env.PORT || 8080, () => {
+  console.log("[app] Started Tunnels API Application on port " + listener.address().port);
+});

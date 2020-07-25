@@ -43,22 +43,6 @@ steps:
   # and services to Google Cloud Run
   #  
 
-  # @service Global API
-  # @region europe-west1
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-    - 'run'
-    - 'deploy'
-    - 'api-europe'
-    - '--image'
-    - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA'
-    - '--region'
-    - 'europe-west1'
-    - '--platform'
-    - 'managed'
-    - '--allow-unauthenticated'
-
-
   # @service Tunnels API
   # @region europe-west1
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -68,6 +52,21 @@ steps:
     - 'api-tunnels-europe'
     - '--image'
     - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/tunnels-api:$COMMIT_SHA'
+    - '--region'
+    - 'europe-west1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+
+  # @service Global API
+  # @region europe-west1
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'deploy'
+    - 'api-europe'
+    - '--image'
+    - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA'
     - '--region'
     - 'europe-west1'
     - '--platform'

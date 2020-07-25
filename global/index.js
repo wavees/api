@@ -4,8 +4,6 @@ const path       = require('path');
 const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
-const { PORT, DEV } = process.env;
-
 // HELPERS
 const helpers = {
   walk: require('./helpers/files/walk')
@@ -44,6 +42,6 @@ helpers.walk('./routes', (error, files) => {
   })
 });
 
-const listener = app.listen(PORT, function() {
-  console.log("wv-core application is listening on " + listener.address().port);
+const listener = app.listen(process.env.PORT || 8080, function() {
+  console.log("[app] Started Wavees API Application on port " + listener.address().port);
 });
