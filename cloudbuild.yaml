@@ -18,10 +18,10 @@ steps:
   
   # Building container
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA', 'global']
+    args: ['build', '-t', 'gcr.io/$GOOGLE_CLOUD_PROJECT/api-global', 'global']
   # Pushing it to Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$GOOGLE_CLOUD_PROJECT/api-global']
 
   # 
   # @api Tunnels
@@ -32,10 +32,10 @@ steps:
   
   # Building container
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/tunnels-api:$COMMIT_SHA', 'tunnels']
+    args: ['build', '-t', 'gcr.io/$GOOGLE_CLOUD_PROJECT/api-tunnels', 'tunnels']
   # Pushing it to Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-west1-docker.pkg.dev/$PROJECT_ID/images/tunnels-api:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$GOOGLE_CLOUD_PROJECT/api-tunnels']
 
   # 
   # @section Deployment
@@ -51,7 +51,7 @@ steps:
     - 'deploy'
     - 'api-tunnels-europe'
     - '--image'
-    - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/tunnels-api:$COMMIT_SHA'
+    - 'gcr.io/$GOOGLE_CLOUD_PROJECT/api-tunnels'
     - '--region'
     - 'europe-west1'
     - '--platform'
@@ -66,13 +66,11 @@ steps:
     - 'deploy'
     - 'api-europe'
     - '--image'
-    - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA'
+    - 'gcr.io/$GOOGLE_CLOUD_PROJECT/api-global'
     - '--region'
     - 'europe-west1'
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated'
 
-images:
-  - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/global-api:$COMMIT_SHA'
-  - 'us-west1-docker.pkg.dev/$PROJECT_ID/images/tunnels-api:$COMMIT_SHA'
+images: ["gcr.io/$GOOGLE_CLOUD_PROJECT/api-global", "gcr.io/$GOOGLE_CLOUD_PROJECT/api-tunnels"]
