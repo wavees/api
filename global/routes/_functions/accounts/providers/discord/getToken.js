@@ -25,7 +25,7 @@ module.exports = (code) => {
       client_id: "740588352117538848",
       client_secret: "9H2pGQx4Y3gav0mI_4_oVZ3NSsn4sePB",
       grant_type: "authorization_code",
-      redirect_uri: "http://localhost:8080",
+      redirect_uri: "https://account.wavees.ml/provider/discord",
       code: code,
       scope: "identify email"
     };
