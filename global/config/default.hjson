@@ -41,7 +41,10 @@
       "getCoins",
       
       "createMedal",
-      "shiftMedal"
+      "shiftMedal",
+
+      "getProviderId",
+      "getProviderToken"
     ]
   },
 

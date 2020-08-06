@@ -68,11 +68,18 @@ module.exports = (identifier, type = "token") => {
           // Let's set the type of this object
           profile.type = "user";
 
+          // User Provider
+          profile.provider = data.provider || "wavees";
+
           // @permission: readEmail
           profile.email    = permissions.has("readEmail") ? data.email : null;
 
           // @permission: readAvatar
-          profile.avatar   = permissions.has("readAvatar") ? `${config.get('api.avatars')}/${data.avatar}` : null;
+          if (profile.provider == "discord") {
+            profile.avatar   = permissions.has("readAvatar") ? `https://cdn.discordapp.com/avatars/${data.dId}/${data.avatar.url}.png` : null;
+          } else {
+            profile.avatar   = permissions.has("readAvatar") ? `${config.get('api.avatars')}/${data.avatar}` : null;
+          };
 
           // @permission: readUsername
           profile.username = permissions.has("readUsername") ? data.username : null;
@@ -83,11 +90,28 @@ module.exports = (identifier, type = "token") => {
           // @uid
           profile.uid = data._id;
 
+          // Provider-related data.
+          // @provider Discord
+          if (profile.provider == "discord") {
+            // Discord User Id
+            profile.discord = {};
+            profile.discord.id    = permissions.has("getProviderId") ? data.dId : null;
+
+            // Access Token.
+            profile.discord.token = permissions.has("getProviderToken") ? data.discord.token : null
+
+            // And now let's check if we need to
+            // refresh our access token or no.
+
+            // *in future*
+          };
+
           resolve(profile);
         } else {
           reject({ error: "InvalidToken" });
         }
-      }).catch(() => {
+      }).catch((error) => {
+        console.log(error);
         reject({ error: "ServerError" });
       });
     };

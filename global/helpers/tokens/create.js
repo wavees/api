@@ -16,8 +16,6 @@ module.exports = (data) => {
       resolve(response.data.document);
     })
     .catch((error) => {
-      console.log("ERROR:");
-      console.log(error.data);
       reject("ServerError");
     });
   });

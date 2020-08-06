@@ -34,6 +34,12 @@ const functions = {
 
     createMedal: require('../../_functions/accounts/medals/createMedal'),
     shifter: require('../../_functions/accounts/medals/shifter')
+  },
+
+  providers: {
+    discord: {
+      getToken: require('../../_functions/accounts/providers/discord/getToken.js')
+    }
   }
 };
 
@@ -305,6 +311,24 @@ router.get('/:token/applications', (req, res) => {
   }).catch((error) => {
     res.status(error.code == null ? 500 : error.code).end(JSON.stringify(error));
   })
+});
+
+// @route getUserToken
+// @method GET
+// @function yeah
+router.get('/provider/:provider/:code/token', (req, res) => {
+  let provider = req.params.provider;
+  let code     = req.params.code;
+
+  // Discord Provider
+  if (provider == "discord") {
+    functions.providers.discord.getToken(code)
+    .then((response) => {
+      res.end(JSON.stringify(response));
+    }).catch((error) => {
+      res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
+    });
+  };
 });
 
 module.exports = router;
