@@ -123,8 +123,9 @@ module.exports = (code) => {
         console.log(error);
         reject({ error: "DiscordUserError" });
       });
-    }).catch(() => {
-      reject({ error: "DiscordError" });
+    }).catch((error) => {
+      console.log(error);
+      reject({ data: error.data, data2: error, error: "DiscordError" });
     });
   });
 };
