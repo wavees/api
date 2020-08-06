@@ -67,13 +67,14 @@ module.exports = (code) => {
               provider: "discord",
 
               username: user.username,
-              email: user.email,
               avatar: {
                 type: "discord",
                 url: user.avatar
               },
 
               discord: {
+                email: discord.email,
+
                 token: discord.access_token,
                 refresh_token: discord.refresh_token,
               }
