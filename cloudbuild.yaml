@@ -38,6 +38,19 @@ steps:
     args: ['push', 'gcr.io/stately-sentry-269110/api-tunnels']
 
   # 
+  # @api Blog
+  # 
+  # @region us-west1
+  # @
+  
+  # Building container
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/stately-sentry-269110/api-blog', 'blog']
+  # Pushing it to Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/stately-sentry-269110/api-blog']
+
+  # 
   # @section Deployment
   # Here we'll deploy all docker images
   # and services to Google Cloud Run
@@ -73,4 +86,19 @@ steps:
     - 'managed'
     - '--allow-unauthenticated'
 
-images: ["gcr.io/stately-sentry-269110/api-global", "gcr.io/stately-sentry-269110/api-tunnels"]
+  # @service Global API
+  # @region europe-west1
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'deploy'
+    - 'api-blog-europe'
+    - '--image'
+    - 'gcr.io/stately-sentry-269110/api-blog'
+    - '--region'
+    - 'europe-west1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+
+images: ["gcr.io/stately-sentry-269110/api-global", "gcr.io/stately-sentry-269110/api-blog", "gcr.io/stately-sentry-269110/api-tunnels"]

@@ -1,0 +1,9 @@
+{ 
+  nodes: {
+    main: {
+      url: "http://europe-north-a2.wnode.ml",
+      key: "hellothere"
+    },
+    list: []
+  }
+}
