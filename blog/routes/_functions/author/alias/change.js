@@ -26,56 +26,76 @@ module.exports = (token, alias) => {
         .then((response) => {
           let user = response.data;
 
-          if (user.type == "user") {
+          if (user.type == "user") {      
             const uid = user.uid;
             // And now let's continue:
 
-            // Now we need to check if we need to update
-            // or to create new alias entry in our database.
+            // Firstly let's check if this alias
+            // isn't taken.
             let body = {
               $$storage: "blog-aliases",
               $$findOne: true,
 
-
+              alias: alias
             };
 
-            axios.get(`${config.get('nodes.main.url')}/get/${config.get("nodes.main.key")}/${JSON.stringify(body)}`)
+            axios.get(`${config.get("nodes.main.url")}/get/${config.get("nodes.main.key")}/${JSON.stringify(body)}`)
             .then((response) => {
               let data = response.data;
 
               if (data.error == "404") {
-                // We need to create new entry.
-                let entry = {
+                // Now we need to check if we need to update
+                // or to create new alias entry in our database.
+                let body = {
                   $$storage: "blog-aliases",
-
-                  alias: alias,
-                  updateTime: moment().unix(),
+                  $$findOne: true,
 
                   uid: uid
                 };
 
-                axios.post(`${config.get("nodes.main.url")}/post/${config.get("nodes.main.key")}`, entry)
+                axios.get(`${config.get('nodes.main.url')}/get/${config.get("nodes.main.key")}/${JSON.stringify(body)}`)
                 .then((response) => {
                   let data = response.data;
 
-                  resolve(data.document);
+                  if (data.error == "404") {
+                    // We need to create new entry.
+                    let entry = {
+                      $$storage: "blog-aliases",
+
+                      alias: alias,
+                      updateTime: moment().unix(),
+
+                      uid: uid
+                    };
+
+                    axios.post(`${config.get("nodes.main.url")}/post/${config.get("nodes.main.key")}`, entry)
+                    .then((response) => {
+                      let data = response.data;
+
+                      resolve(data.document);
+                    }).catch(() => {
+                      reject({ error: "ServerError" });
+                    });
+                  } else {
+                    // Now we need to update existing
+                    // entry.
+                    let entry = data;
+
+                    entry.alias      = alias;
+                    entry.updateTime = moment().unix();
+                  
+                    axios.put(`${config.get("nodes.main.url")}/update/${config.get("nodes.main.key")}/${JSON.stringify(body)}`, entry)
+                    .then(() => {
+                      resolve(entry);
+                    }).catch(() => {
+                      reject({ error: "ServerError" });
+                    })
+                  };
                 }).catch(() => {
                   reject({ error: "ServerError" });
                 });
               } else {
-                // Now we need to update existing
-                // entry.
-                let entry = data;
-
-                entry.alias      = alias;
-                entry.updateTime = moment().unix();
-              
-                axios.put(`${config.get("nodes.main.url")}/update/${config.get("nodes.main.key")}/${JSON.stringify(body)}`, entry)
-                .then(() => {
-                  resolve(entry);
-                }).catch(() => {
-                  reject({ error: "ServerError" });
-                })
+                reject({ status: 400, error: "AliasAlreadyTaken" })
               };
             }).catch(() => {
               reject({ error: "ServerError" });
