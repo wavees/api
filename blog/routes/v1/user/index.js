@@ -1,10 +1,8 @@
 const router = require('express').Router();
 
 const functions = {
-  checkFollow: require('../_functions/user/checkFollow.js'),
-  follow: require('../_functions/user/follow.js'),
-
-  getFollowers: require('../_functions/user/getFollowers.js')
+  checkFollow: require('../../_functions/user/checkFollow.js'),
+  follow: require('../../_functions/user/follow.js')
 };
 
 // Check Follower
@@ -28,19 +26,6 @@ router.post('/:uid/follow/:aid', (req, res) => {
   const aid = req.params.aid;
 
   functions.follow(uid, aid)
-  .then((response) => {
-    res.end(JSON.stringify(response));
-  }).catch((error) => {
-    res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
-  });
-});
-
-// Get Followers Count
-router.get('/:aid/followers', (req, res) => {
-  // Get AID
-  const aid = req.params.aid;
-
-  functions.getFollowers(aid)
   .then((response) => {
     res.end(JSON.stringify(response));
   }).catch((error) => {

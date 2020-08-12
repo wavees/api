@@ -1,4 +1,9 @@
 { 
+  api: {
+    url: "https://api.wavees.ml",
+    version: "v1"
+  },
+
   nodes: {
     main: {
       url: "http://europe-north-a2.wnode.ml",
