@@ -44,7 +44,9 @@
       "shiftMedal",
 
       "getProviderId",
-      "getProviderToken"
+      "getProviderToken",
+
+      "blog/changeAlias"
     ]
   },
 
