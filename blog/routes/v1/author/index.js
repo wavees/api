@@ -26,9 +26,9 @@ router.get('/:aid/followers', (req, res) => {
 
 // Get Author Alias
 router.get('/:uid/alias', (req, res) => {
-  const aid = req.params.aid;
+  const uid = req.params.uid;
 
-  functions.alias.retrieve(aid)
+  functions.alias.retrieve(uid)
   .then((response) => {
     res.end(JSON.stringify(response));
   }).catch((error) => {
