@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const events = require('../../../events/index.js');
 
 const functions = {
   alias: {
@@ -43,6 +44,9 @@ router.put('/:token/alias', (req, res) => {
 
   functions.alias.change(token, alias)
   .then((response) => {
+    // Let's now call our AliasChange event.
+    events.emit("socketEvent", { event: "aliasChange", uid: response.uid, aid: response.uid, response: response });
+
     res.end(JSON.stringify(response));
   }).catch((error) => {
     res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));

@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const events = require('../../../events/index.js');
 
 const functions = {
   checkFollow: require('../../_functions/user/checkFollow.js'),
@@ -27,8 +28,12 @@ router.post('/:uid/follow/:aid', (req, res) => {
 
   functions.follow(uid, aid)
   .then((response) => {
+    // By the way, let's now call
+    // our global event.
+    events.emit("socketEvent", { event: "followAuthor", uid: uid, aid: aid, response: response });
+
     res.end(JSON.stringify(response));
-  }).catch((error) => {
+  }).catch(() => {
     res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
   });
 });
