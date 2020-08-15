@@ -31,12 +31,12 @@
 
   permissions: {
     default: [
-      "readEmail",
+      // "readEmail",
       "readAvatar",
       "readUsername",
 
       // "changeUsername",
-      "getTokens",
+      // "getTokens",
 
       "getCoins"
       
@@ -47,7 +47,59 @@
       // "getProviderToken",
 
       // "blog/changeAlias"
-    ]
+    ],
+
+    list: {
+      // @service Blog
+      // @permission Change Current Alias
+      "blog/changeAlias": {
+        id: "blog/changeAlias",
+        title: {
+          ru: "Изменять Авторскую Ссылку на сервисе Wavees Blog",
+          en: "Change Author Alias on Wavees Blog"
+        }
+      },
+
+      // @service Blog
+      // @permission Follow Author
+      "blog/follow": {
+        id: "blog/follow",
+        title: {
+          ru: "Подписываться на авторов на сервисе Wavees Blog",
+          en: "Follow another authors on Wavees Blog"
+        }
+      },
+
+      // @service Blog
+      // @permission Unfollow Author
+      "blog/unfollow": {
+        id: "blog/unfollow",
+        title: {
+          ru: "Отписываться от авторов на сервисе Wavees Blog",
+          en: "Unfollow another authors on Wavees Blog"
+        }
+      },
+
+      // @service Medals
+      // @permission Create Medal
+      "medals/createMedal": {
+        id: "medals/createMedal",
+        title: {
+          ru: "Создавать пользовательские медали на Wavees Achievements",
+          en: "Create customized medals on Wavees Achievements"
+        }
+      },
+
+      // @service Medals
+      // @permission Shift Medal
+      "medals/shiftMedal": {
+        id: "medals/shiftMedal",
+        title: {
+          ru: "Голосовать за какие-либо медали на сервисе Wavees Achievements",
+          en: "Vote for medals on Wavees Achievements"
+        }
+      }
+    }
   },
 
   // 
