@@ -50,6 +50,36 @@
     ],
 
     list: {
+      // @service Wavees
+      // @permission ReadAvatar
+      readAvatar: {
+        id: "readAvatar",
+        title: {
+          ru: "Смотреть на вашу прекрасную Аватарку",
+          en: "Look at your beautiful Profile Image"
+        }
+      },
+
+      // @service Wavees
+      // @permission ReadEmail
+      readEmail: {
+        id: "readEmail"
+        title: {
+          ru: "Читать вашу Почту",
+          en: "Read your Email"
+        }
+      },
+
+      // @service Wavees
+      // @permission ReadUsername
+      readUsername: {
+        id: "readUsername",
+        title: {
+          ru: "Читать имя пользователя",
+          en: "Read your Username"
+        }
+      },
+
       // @service Blog
       // @permission Change Current Alias
       "blog/changeAlias": {

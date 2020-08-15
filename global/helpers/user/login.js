@@ -32,7 +32,7 @@ module.exports = (user) => {
       } else {
         // Авторизовываем..
         if (data.pincode == SHA256.hex(user.pincode)) {
-          helpers.createToken({ uid: data._id, type: "user", permissions: ["duplicateToken"] })
+          helpers.createToken({ uid: data._id, type: "user", permissions: ["duplicateToken","readEmail"] })
           .then((data) => {
             resolve(data.token);
           })
