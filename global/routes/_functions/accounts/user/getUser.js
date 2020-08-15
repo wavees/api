@@ -18,6 +18,7 @@ module.exports = (identifier, type = "token") => {
 
   return new Promise((resolve, reject) => {
     let permissions = config.get('permissions.default');
+    let userData = {};
     let uid = identifier;
 
     // @type token
@@ -28,11 +29,8 @@ module.exports = (identifier, type = "token") => {
 
         if (data.type == "user") {
           // Let's read this token's permissions
-          if (data.permissions != null) {
-            permissions.push(data.permissions);
-          };
-
           uid = data.uid;
+          userData = data;
 
           getUser();
         }
@@ -45,7 +43,11 @@ module.exports = (identifier, type = "token") => {
 
     function getUser() {
       // Let's now prepare permission object..
-      permissions = helpers.permissions(permissions);
+      if (userData.permissions == null) {
+        permissions = helpers.permissions(...permissions);
+      } else {
+        permissions = helpers.permissions(...permissions, ...userData.permissions);
+      };
 
       // And now let's just get this user
       // and return information about it.

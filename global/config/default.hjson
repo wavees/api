@@ -35,18 +35,18 @@
       "readAvatar",
       "readUsername",
 
-      "changeUsername",
+      // "changeUsername",
       "getTokens",
 
-      "getCoins",
+      "getCoins"
       
-      "createMedal",
-      "shiftMedal",
+      // "createMedal",
+      // "shiftMedal",
 
-      "getProviderId",
-      "getProviderToken",
+      // "getProviderId",
+      // "getProviderToken",
 
-      "blog/changeAlias"
+      // "blog/changeAlias"
     ]
   },
 

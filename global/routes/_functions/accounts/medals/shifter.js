@@ -42,10 +42,6 @@ module.exports = (token, id) => {
           // Let's now determine what we should do next...
           let type;
           
-          console.log("DATA:");
-          console.log(data);
-          console.log(data == null);
-          console.log(data == {});
           if (data.error == null) {
             if (data != {}) {
               type = "disagree";
@@ -56,8 +52,6 @@ module.exports = (token, id) => {
             type = "agree";
           };
 
-          console.log("TYPE:");
-          console.log(type);
           // And now let's do something...
           if (type == "agree") {
             // And now we need to agree to this medal...
@@ -66,15 +60,10 @@ module.exports = (token, id) => {
             .then((response) => {
               let data = response.data;
 
-              console.log('data 2');
-              console.log(data);
               // And now let's just return
               // some info to the main promise.
               resolve({ type: "agree" });
-            }).catch((error) => {
-              console.log('error 3:');
-              console.log(error);
-
+            }).catch(() => {
               reject({ error: "ServerError" });
             });
           } else {
@@ -82,21 +71,15 @@ module.exports = (token, id) => {
             axios.delete(`${config.get('nodes.main.url')}/delete/${config.get('nodes.main.key')}/${JSON.stringify(query)}`)
             .then((response) => {
               let data = response.data;
-              console.log("DEL 1:");
-              console.log(data);
 
               // And now let's just resolve the
               // main promise.
               resolve({ type: "disagree" })
             }).catch((error) => {
-              console.log("Error 1:")
-              console.log(error);
               reject({ error: "ServerError" })
             });
           }
         }).catch((error) => {
-          console.log("error 2");
-          console.log(error)
           reject({ error: "ServerError" });
         });
       } else {

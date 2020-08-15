@@ -30,10 +30,10 @@ module.exports = (token, username) => {
         // And now we need to check this token's permissions
         // and check something.
         let permissions = config.get('permissions.default');
-        if (data.permissions == null) {
-          permissions = helpers.permissions(permissions);
+        if (user.permissions == null) {
+          permissions = helpers.permissions(...permissions);
         } else {
-          permissions = helpers.permissions(permissions.push(user.permissions));
+          permissions = helpers.permissions(...permissions, ...user.permissions);
         };
 
         if (permissions.has("changeUsername")) {

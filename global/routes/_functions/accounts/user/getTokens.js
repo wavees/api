@@ -26,9 +26,9 @@ module.exports = (token) => {
         // And now we need to check permissions of this token...
         let permissions = config.get('permissions.default');
         if (user.permissions == null) {
-          permissions = helpers.permissions(permissions);
+          permissions = helpers.permissions(...permissions);
         } else {
-          permissions = helpers.permissions(permissions.push(user.permissions));
+          permissions = helpers.permissions(...permissions, ...user.permissions);
         };
 
         // Now we'll check if this token has needed permission.
@@ -49,8 +49,6 @@ module.exports = (token) => {
               resolve(data);
             };
           }).catch((error) => {
-            console.log("error 1");
-            console.log(error);
             reject({ error: "ServerErorr" });
           });
         } else {
@@ -60,8 +58,6 @@ module.exports = (token) => {
         reject({ error: "InvalidToken", code: 400 });
       };
     }).catch((error) => {
-      console.log("ERROR 2");
-      console.log(error);
       reject(error);
     });
   });

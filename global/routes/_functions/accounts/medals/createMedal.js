@@ -29,11 +29,11 @@ module.exports = (token, body) => {
       if (data.type == "user") {
         // Let's now check permissions.
         let permissions = config.get('permissions.default');
-        if (data.permission) {
-          permissions.push(data.permissions);
+        if (data.permissions == null) {
+          permissions = helpers.permissions(...permissions);
+        } else {
+          permissions = helpers.permissions(...permissions, ...data.permissions);
         };
-
-        permissions = helpers.permissions(permissions);
 
         // And now let's check it...
         if (permissions.has("createMedal")) {
