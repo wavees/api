@@ -14,12 +14,16 @@ router.get('/:permissions', (req, res) => {
   // permissions and get their configurations
   // and information.
   permissions.forEach(perm => {
-    let permission = config.get(`permissions.list.${perm}`);
+    try {
+      let permission = config.get(`permissions.list.${perm}`);
 
-    if (permission != null) {
-      permission.permission = perm; 
+      if (permission != null) {
+        permission.permission = perm; 
 
-      returnPermissions.push(permission);
+        returnPermissions.push(permission);
+      };
+    } catch(error) {
+      console.log("Error getting permission node: " + perm);
     };
   });
 
