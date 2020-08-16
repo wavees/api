@@ -104,7 +104,12 @@ module.exports = (code) => {
             // this user and return it.
             let token = {
               uid: data._id,
-              type: "user"
+              type: "user",
+
+              permissions: [
+                "duplicateToken",
+                "readEmail"
+              ]
             };
 
             helpers.createToken(token)
