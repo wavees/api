@@ -129,6 +129,56 @@
           en: "Vote for medals on Wavees Achievements"
         }
       }
+
+      // @service Ideas
+      // @permission viewPolls
+      "ideas/viewPolls": {
+        id: "ideas/viewPolls",
+        title: {
+          ru: "Смотреть список ваших голосований на Wavees Ideas",
+          en: "Gather information about all your polls on Wavees Ideas"
+        }
+      },
+
+      // @service Ideas
+      // @permission createPolls
+      "ideas/createPolls": {
+        id: "ideas/createPolls",
+        title: {
+          ru: "Создавать новые голосования на сервисе Wavees Ideas",
+          en: "Create new polls on Wavees Ideas"
+        }
+      },
+
+      // @service Ideas
+      // @permission managePolls
+      "ideas/managePolls": {
+        id: "ideas/managePolls",
+        title: {
+          ru: "Управлять/изменять ваши голосования на Wavees Ideas",
+          en: "Manage/customize your Wavees Ideas' polls"
+        }
+      },
+
+      // @service Ideas
+      // @permission deletePolls
+      "ideas/deletePolls": {
+        id: "ideas/deletePolls",
+        title: {
+          ru: "Удалять голосования на сервисе Wavees Ideas",
+          en: "Delete your Wavees Ideas' polls"
+        }
+      },
+
+      // @service Ideas
+      // @permission viewStatistics
+      "ideas/viewStatistics": {
+        id: "ideas/viewStatistics",
+        title: {
+          ru: "Просматривать статистические данные на Wavees Ideas",
+          en: "Gather all Statistics information on Wavees Ideas"
+        }
+      }
     }
   },
 
