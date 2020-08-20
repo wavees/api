@@ -1,10 +1,12 @@
 const router = require('express').Router();
+const cache  = require('apicache').middleware;
 
 const actions = {
   retrieveToken: require('../../../actions/tokens/retrieveToken')
 };
 
-router.get('/:token', (req, res) => {
+router.get('/:token', cache('1 day'), (req, res) => {
+  req.apicacheGroup = "token";
   const token = req.params.token;
 
   actions.retrieveToken(token)
