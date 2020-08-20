@@ -1,14 +1,16 @@
-const app        = require('express')();
-const bodyParser = require('body-parser');
-const path       = require('path');
-const cors       = require('cors');
+const app         = require('express')();
+const bodyParser  = require('body-parser');
+const path        = require('path');
+const cors        = require('cors');
+const bearerToken = require('express-bearer-token');
 
-const http       = require('http').createServer(app);
+const http        = require('http').createServer(app);
 
-const helpers    = {
+const helpers     = {
   walk: require('./helpers/walk')
 };
 
+app.use(bearerToken());
 app.use(bodyParser.json());
 app.use(cors());
 
