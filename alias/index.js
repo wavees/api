@@ -4,14 +4,6 @@ const path       = require('path');
 const cors       = require('cors');
 
 const http       = require('http').createServer(app);
-const io         = require('socket.io')(http);
-
-const socket     = require('./socket');
-
-// Socket io route.
-io.on('connection', (e) => {
-  socket(e);
-});
 
 const helpers    = {
   walk: require('./helpers/walk')
