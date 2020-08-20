@@ -178,6 +178,16 @@
           ru: "Просматривать статистические данные на Wavees Ideas",
           en: "Gather all Statistics information on Wavees Ideas"
         }
+      },
+
+      // @service Ideas
+      // @permission accountSettings
+      "ideas/accountSettings": {
+        id: "ideas/viewStatistics",
+        title: {
+          ru: "Управлять настройками аккаунта на сервисе Wavees Ideas",
+          en: "Manage your account on Wavees Ideas"
+        }
       }
     }
   },
