@@ -6,24 +6,14 @@ const config = require('config');
 // function
 module.exports = (uid) => {
   return new Promise((resolve, reject) => {
-    let request = {
-      $$storage: "blog-aliases",
-      $$findOne: true,
-
-      uid: uid
-    };
-
-    axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(request)}`)
+    axios.get(`${config.get('apiAlias.url')}/${config.get('apiAlias.version')}/${config.get('application.id')}/{"data.uid":"${uid}"}`)
     .then((response) => {
       let data = response.data;
 
-      if (data.error == "404") {
-        reject({ status: 404, error: "NotAliasFound" });
-      } else {
-        resolve(data);
-      };
-    }).catch(() => {
-      reject({ error: "ServerError" });
+      resolve(data);
+    }).catch((error) => {
+      console.log(error);
+      reject(error.response);
     });
   });
 };

@@ -1,4 +1,7 @@
-const events = require('../events/index.js');
+const events  = require('../events/index.js');
+const actions = { 
+  getData: require('./actions/getData')
+};
 
 module.exports = (socket) => {
   // Small object, that'll determine
@@ -8,6 +11,20 @@ module.exports = (socket) => {
     uid: null,
     listenTo: []
   };
+
+  // @action getData 
+  socket.on('getData', (e) => {
+    console.log("GETDATA");
+    console.log(e);
+
+    actions.getData(e)
+    .then((response) => {
+      console.log("RESPONSE");
+      console.log(response);
+
+      socket.emit(response.dataType, response);
+    });
+  });
 
   // 
   socket.on('settings', (e) => {
