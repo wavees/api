@@ -54,8 +54,8 @@ module.exports = (token, body) => {
 
                 // By the way, now we need to uncache information
                 // about pervios alias...
-                cache.clear(`alias/${body.alias}`);
-                cache.clear(`alias/${data.alias}`);
+                cache.clear(`alias/${application.id}/${body.alias}`);
+                cache.clear(`alias/${application.id}/${data.alias}`);
 
                 if (data.error == "404") {
 
@@ -67,13 +67,15 @@ module.exports = (token, body) => {
                     alias: body.alias,
                     updateTime: moment().unix(),
         
-                    data: body.data
+                    data: body.data,
                   };
         
                   axios.post(`${config.get("nodes.main.url")}/post/${config.get("nodes.main.key")}`, entry)
                   .then((response) => {
                     let data = response.data;
         
+                    data._id = undefined;
+                    data.application = application;
                     resolve(data.document);
                   }).catch(() => {
                     reject({ status: 500, error: "ServerError" });
@@ -88,6 +90,9 @@ module.exports = (token, body) => {
 
                   axios.put(`${config.get("nodes.main.url")}/update/${config.get("nodes.main.key")}/${JSON.stringify(request)}`, entry)
                   .then(() => {
+
+                    entry.application = application;
+                    entry._id = undefined;
                     resolve(entry);
                   }).catch(() => {
                     reject({ error: "ServerError" });
@@ -114,12 +119,14 @@ module.exports = (token, body) => {
           };
 
           // Uncaching previous entry...
-          cache.clear(`alias/${body.alias}`);
+          cache.clear(`alias/${application.id}/${body.alias}`);
 
           axios.post(`${config.get("nodes.main.url")}/post/${config.get("nodes.main.key")}`, entry)
           .then((response) => {
             let data = response.data;
 
+            data._id = undefined;
+            data.application = application;
             resolve(data.document);
           }).catch(() => {
             reject({ status: 500, error: "ServerError" });

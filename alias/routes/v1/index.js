@@ -5,14 +5,14 @@ const actions = {
   getAlias: require('../../actions/getAlias')
 };
 
-router.get('/:alias', cache.middleware('1 day'), (req, res) => {
+router.get('/:appId/alias/:alias', cache.middleware('1 day'), (req, res) => {
   const alias = req.params.alias;
-  const token = req.token;
+  const appId = req.params.appId;
 
-  req.apicacheGroup = `alias/${alias}`;
+  req.apicacheGroup = `alias/${appId}/${alias}`;
 
   // Let's just get this alias...
-  actions.getAlias(alias, token)
+  actions.getAlias(alias, appId)
   .then((response) => {
     res.end(JSON.stringify(response));
   }).catch((error) => {
