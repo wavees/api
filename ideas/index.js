@@ -2,21 +2,23 @@ const app        = require('express')();
 const bodyParser = require('body-parser');
 const path       = require('path');
 const cors       = require('cors');
+const bearerToken = require('express-bearer-token');
 
 const http       = require('http').createServer(app);
 const io         = require('socket.io')(http);
 
-const socket     = require('./socket');
+// const socket     = require('./socket');
 
-// Socket io route.
-io.on('connection', (e) => {
-  socket(e);
-});
+// // Socket io route.
+// io.on('connection', (e) => {
+//   socket(e);
+// });
 
 const helpers    = {
   walk: require('./helpers/walk')
 };
 
+app.use(bearerToken());
 app.use(bodyParser.json());
 app.use(cors());
 

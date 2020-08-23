@@ -4,13 +4,8 @@
     version: "v1"
   },
 
-  apiAlias: {
-    url: "https://api.alias.wavees.ml",
-    version: "v1"
-  },
-
   application: {
-    id: "OkaEIZCjUdLTVkK7",
+    id: "",
     token: ""
   },
 
