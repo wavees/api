@@ -64,6 +64,19 @@ steps:
     args: ['push', 'gcr.io/stately-sentry-269110/api-alias']
 
   # 
+  # @api Ideas
+  # 
+  # @region us-west1
+  # @
+  
+  # Building container
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/stately-sentry-269110/api-ideas', 'ideas']
+  # Pushing it to Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/stately-sentry-269110/api-ideas']
+
+  # 
   # @section Deployment
   # Here we'll deploy all docker images
   # and services to Google Cloud Run
@@ -129,4 +142,19 @@ steps:
     - 'managed'
     - '--allow-unauthenticated'
 
-images: ["gcr.io/stately-sentry-269110/api-global", "gcr.io/stately-sentry-269110/api-blog", "gcr.io/stately-sentry-269110/api-tunnels"]
+  # @service Ideas API
+  # @region europe-west1
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+    - 'run'
+    - 'deploy'
+    - 'api-ideas-europe'
+    - '--image'
+    - 'gcr.io/stately-sentry-269110/api-ideas'
+    - '--region'
+    - 'europe-west1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+
+images: ["gcr.io/stately-sentry-269110/api-global", "gcr.io/stately-sentry-269110/api-blog", "gcr.io/stately-sentry-269110/api-tunnels", "gcr.io/stately-sentry-269110/api-ideas", "gcr.io/stately-sentry-269110/api-alias"]

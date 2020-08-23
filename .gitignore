@@ -2,4 +2,5 @@ global/node_modules
 tunnels/node_modules
 blog/node_modules
 alias/node_modules
+ideas/node_modules
 .env

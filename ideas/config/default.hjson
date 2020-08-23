@@ -1,0 +1,24 @@
+{ 
+  api: {
+    url: "https://api.wavees.ml",
+    version: "v1"
+  },
+
+  apiAlias: {
+    url: "https://api.alias.wavees.ml",
+    version: "v1"
+  },
+
+  application: {
+    id: "OkaEIZCjUdLTVkK7",
+    token: ""
+  },
+
+  nodes: {
+    main: {
+      url: "http://europe-north-a2.wnode.ml",
+      key: "hellothere"
+    },
+    list: []
+  }
+}
