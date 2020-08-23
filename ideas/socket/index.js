@@ -14,13 +14,18 @@ module.exports = (socket) => {
 
   // @action getData 
   socket.on('getData', (e) => {
+    console.log("GET DATA");
+    console.log(e);
+
     actions.getData(e)
     .then((response) => {
+      console.log("RESPONSE");
+      console.log(response);
       socket.emit(response.dataType, response);
     });
   });
 
-  // 
+  // @action Settings
   socket.on('settings', (e) => {
     settings = e;
   });

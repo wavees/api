@@ -1,24 +1,15 @@
-const getUser      = require('./user/getUser');
-const checkData    = require('./checkData');
-const getFollowers = require('./user/getFollowers');
+const getOrganizations = require('../../../actions/organizations/getList');
 
 module.exports = (data) => {
   return new Promise((resolve, reject) => {
     // Let's now check this data type.
-    if (data.type == "userData") {
-      getUser(data.uid)
+    if (data.type == "organizationsList") {
+      getOrganizations(data.token)
       .then((response) => {
-        resolve(response);
+        resolve({ dataType: "organizationsList", response });
       }).catch((error) => {
-        resolve(error);
+        resolve({ dataType: "organizationsList", error });
       });
-    } else if (data.type == "checkData") {
-      checkData(data.id)
-      .then((response) => {
-        resolve(response);
-      }).catch((error) => {
-        reject(error);
-      });
-    }
+    };
   });
 };
