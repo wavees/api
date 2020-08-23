@@ -1,12 +1,16 @@
 const config          = require('config');
 const axios           = require('axios');
+const cache           = require('apicache');
 
 const getToken        = require('../tokens/get');
 const checkPermission = require('../tokens/permissions/check');
 const addMember       = require('./members/add');
 
-module.exports = (token, configuration) => {
+module.exports = (token, configuration = {}) => {
   return new Promise((resolve, reject) => {
+    // Let's uncache this token's information.
+    cache.clear(`org-${token}`);
+    
     // Let's firstly get our token and check
     // if it can create new organizations.
     getToken(token)
@@ -30,6 +34,8 @@ module.exports = (token, configuration) => {
         type: configuration.type,
 
         name: configuration.name || `${token.data.user.username}'s Org`,
+        description: configuration.description || `Normal Organization`,
+
         ownerId: token.data.user.uid
       };
 
@@ -44,7 +50,6 @@ module.exports = (token, configuration) => {
           // Let's just return this organization's information.
           resolve(organization);
         }).catch((error) => {
-          console.log("ERROR 6");
           reject(error);
         });
       }).catch(() => {

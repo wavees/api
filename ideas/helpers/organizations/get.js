@@ -20,7 +20,7 @@ module.exports = (oid) => {
         let organization = {
           id: data._id,
 
-          type: data.type,
+          type: data.type || "Normal",
           name: data.name,
 
           ownerId: data.ownerId
