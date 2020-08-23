@@ -14,14 +14,8 @@ module.exports = (socket) => {
 
   // @action getData 
   socket.on('getData', (e) => {
-    console.log("GETDATA");
-    console.log(e);
-
     actions.getData(e)
     .then((response) => {
-      console.log("RESPONSE");
-      console.log(response);
-
       socket.emit(response.dataType, response);
     });
   });

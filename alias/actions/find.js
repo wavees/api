@@ -20,7 +20,7 @@ module.exports = (appId, query) => {
       .then((response) => {
         let data = response.data;
 
-        if (data.error == "404" && data.alias != null) {
+        if (data.error == "404" && data.alias == null) {
           reject({ status: 404, error: "NotFound" });
         } else {
           getAlias(data.alias, appId)

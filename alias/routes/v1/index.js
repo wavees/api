@@ -30,8 +30,6 @@ router.get('/:appId/find/:query', (req, res) => {
   .then((response) => {
     res.end(JSON.stringify(response));
   }).catch((error) => {
-    console.log("ERROR 1");
-    console.log(error);
     res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
   });
 });
