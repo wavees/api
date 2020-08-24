@@ -15,6 +15,9 @@ router.get('/', cache.middleware('1 day'), (req, res) => {
   const token = req.token;
   req.apicacheGroup = `org-${token}`;
 
+  console.log("TOKEN");
+  console.log(token);
+
   actions.getList(token)
   .then((response) => {
     res.end(JSON.stringify(response));
