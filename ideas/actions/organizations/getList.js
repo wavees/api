@@ -5,7 +5,6 @@ const getOrganization = require('../../helpers/organizations/get');
 
 module.exports = (token) => {
   return new Promise((resolve, reject) => {
-
     getToken(token)
     .then((response) => {
       const token = response;
@@ -15,7 +14,7 @@ module.exports = (token) => {
         reject({ status: 400, error: "InvalidToken" });
       } else {
         // Let's just get all orgnizations.
-        getAll(token.token)
+        getAll(token.data.user.uid)
         .then((response) => {
           let organizationsIds = response;
           let organizationsLength = organizationsIds.length;
