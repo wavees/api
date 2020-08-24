@@ -1,14 +1,19 @@
-const getOrganizations = require('../../../actions/organizations/getList');
+const axios = require('axios');
 
 module.exports = (data) => {
   return new Promise((resolve, reject) => {
     // Let's now check this data type.
     if (data.type == "organizationsList") {
-      getOrganizations(data.token)
+      // (using Axios for caching)
+      axios.get('/v1/organizations', { headers: {
+        "Authorization": `Bearer ${data.token}`
+      }})
       .then((response) => {
-        resolve({ dataType: "organizationsList", response });
+        let data = response.data;
+
+        resolve({ dataType: "organizationsList", response: data });
       }).catch((error) => {
-        resolve({ dataType: "organizationsList", error });
+        resolve({ dataType: "organizationsList", error: error.response.data });
       });
     };
   });
