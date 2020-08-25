@@ -3,4 +3,5 @@ tunnels/node_modules
 blog/node_modules
 alias/node_modules
 ideas/node_modules
+flow/node_modules
 .env
