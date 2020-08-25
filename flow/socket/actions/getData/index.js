@@ -12,6 +12,9 @@ module.exports = (data) => {
   return new Promise((resolve, reject) => {
     // Let's now check this data type.
     
+    console.log("REQUEST");
+    console.log(data);
+
     // @type account
     if (data.type == "account") {
       getAccount(data.token)

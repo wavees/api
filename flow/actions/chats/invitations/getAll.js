@@ -21,7 +21,7 @@ module.exports = (token, cid) => {
             // And now let's get our invitation links.
             getInvites(cid)
             .then((response) => {
-              resolve(response);
+              resolve(response.sort());
             }).catch((error) => {
               reject(error);
             });
