@@ -34,9 +34,31 @@ module.exports = (cid) => {
           members: data.members || []
         };
 
-        if (!chat.members.includes(chat.ownerId)) chat.members.push(chat.ownerId);
+        // And now we need to find this
+        // chat's members...
+        let request = {
+          $$storage: "flow-chatMembership",
 
-        resolve(chat);
+          // Chat Id
+          cid
+        };
+
+        axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(request)}`)
+        .then((response) => {
+          // Let's now add all user ids in members array
+          if (response.data.length > 0) {
+            response.data.forEach((member) => {
+              if (!chat.members.includes(member.uid)) chat.members.push(member.uid);
+            });
+          };
+
+          // Let's check if our members array contains ownerId;
+          if (!chat.members.includes(chat.ownerId)) chat.members.push(chat.ownerId);
+
+          resolve(chat);  
+        }).catch(() => {
+          reject({ status: 500, error: "ServerError" });
+        });
       };
     }).catch(() => {
       reject({ status: 500, error: "ServerError" });
