@@ -1,5 +1,7 @@
-const axios  = require('axios');
-const config = require('config');
+const axios    = require('axios');
+const config   = require('config');
+
+const getChats = require('../chats/getAll');
 
 module.exports = (uid) => {
   return new Promise((resolve, reject) => {
@@ -29,7 +31,7 @@ module.exports = (uid) => {
           name: data.name,
           avatar: data.avatar,
 
-          registerDate: data.registerDate
+          registerDate: data.registerDate,
         };
 
         resolve(user);

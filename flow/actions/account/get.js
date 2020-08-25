@@ -11,7 +11,10 @@ module.exports = (token) => {
     if (token.split('').length > 10) {
       getUser(token)
       .then((response) => {
-        resolve(response);
+        let user = response;
+        user.token = undefined;
+
+        resolve(user);
       }).catch(() => {
         reject({ status: 400, error: "InvalidUserId" });
       });
@@ -19,7 +22,10 @@ module.exports = (token) => {
       getToken(token)
       .then((response) => {
         if (response.type == "userAccount") {
-          resolve(response);
+          let user = response;
+          user.token = token;
+
+          resolve(user);
         } else {
           reject({ status: 400, error: "InvalidUserToken" });
         };

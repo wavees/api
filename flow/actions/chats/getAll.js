@@ -29,7 +29,8 @@ module.exports = (token) => {
       } else {
         resolve([]);
       };
-    }).catch(() => {
+    }).catch((error) => {
+      console.log(error);
       reject(error);
     });
   });

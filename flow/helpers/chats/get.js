@@ -1,5 +1,8 @@
-const axios  = require('axios');
-const config = require('config');
+const axios          = require('axios');
+const c = require('config');
+const config         = require('config');
+
+const getInvitations = require('../invitations/get');
 
 module.exports = (cid) => {
   return new Promise((resolve, reject) => {
@@ -31,7 +34,9 @@ module.exports = (cid) => {
           avatar: data.avatar,
 
           ownerId: data.ownerId,
-          members: data.members || []
+          members: [],
+
+          invitations: []
         };
 
         // And now we need to find this
@@ -55,7 +60,15 @@ module.exports = (cid) => {
           // Let's check if our members array contains ownerId;
           if (!chat.members.includes(chat.ownerId)) chat.members.push(chat.ownerId);
 
-          resolve(chat);  
+          // And now we need to get this chat's invitations...
+          getInvitations(cid)
+          .then((response) => {
+            chat.invitations = response;
+
+            resolve(chat);
+          }).catch(() => {
+            reject({ status: 500, error: "ServerError" });
+          });  
         }).catch(() => {
           reject({ status: 500, error: "ServerError" });
         });

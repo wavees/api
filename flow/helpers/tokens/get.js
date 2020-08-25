@@ -5,7 +5,6 @@ const getUser = require('../user/get');
 
 module.exports = (token) => {
   return new Promise((resolve, reject) => {
-    
     // Let's prepare our request
     let request = {
       $$storage: "flow-tokens",

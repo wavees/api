@@ -1,7 +1,9 @@
 const axios    = require('axios');
 const config   = require('config');
 
-const getToken = require('../tokens/get');
+const getToken = require('../tokens/get.js');
+
+console.log(getToken);
 
 module.exports = (token) => {
   return new Promise((resolve, reject) => {
