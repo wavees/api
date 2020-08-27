@@ -58,21 +58,25 @@ module.exports = (socket) => {
   });
 
   // @action getData 
-  socket.on('getData', (event) => {
+  socket.on('getData', (data) => {
     if (!settings.authorized) return;
-    let data = event;
-    data.connection = settings.connection;
 
     actions.getData(data)
     .then((response) => {
-      events.emit('socketResponse', {
-        uid: settings.uid,
-        data: response
-      });
+      if (response.private) {
+        socket.emit(data.dataType, { response: data.response });
+      } else {
+        events.emit('socketResponse', {
+          uid: settings.uid,
+          data: response
+        });
+      };
     });
   });
 
   events.on('socketResponse', (data) => {
+    console.log(data.uid);
+    console.log(settings.uid);
     if (data.uid = settings.uid) {
       socket.emit(data.data.dataType == null ? "socketResponse" : data.data.dataType, { response: data.data.response });
     };

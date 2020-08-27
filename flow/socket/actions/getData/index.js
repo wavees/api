@@ -16,7 +16,7 @@ module.exports = (data) => {
     if (data.type == "account") {
       getAccount(data.token)
       .then((response) => {
-        resolve({ dataType: "account", response, connection: data.connection });
+        resolve({ dataType: "account", response, private: true });
       }).catch((error) => {
         resolve({ dataType: "account", error: error.response.data });
       });
@@ -24,7 +24,7 @@ module.exports = (data) => {
     } else if (data.type == "createAccount") {
       createAccount(data.user)
       .then((response) => {
-        resolve({ dataType: "accountCreation", response, connection: data.connection });
+        resolve({ dataType: "accountCreation", response, private: true });
       }).catch((error) => {
         resolve({ dataType: "accountCreation", error: error.response.data });
       });
@@ -32,7 +32,7 @@ module.exports = (data) => {
     } else if (data.type == "chats") {
       getChats(data.token)
       .then((response) => {
-        resolve({ dataType: "chats", response, connection: data.connection });
+        resolve({ dataType: "chats", response, private: true });
       }).catch((error) => {
         resolve({ dataType: "chats", error: error.response.data });
       });
@@ -40,7 +40,7 @@ module.exports = (data) => {
     } else if (data.type == "chat") {
       getChat(data.token, data.cid)
       .then((response) => {
-        resolve({ dataType: "chat", response, connection: data.connection });
+        resolve({ dataType: "chat", response, private: true });
       }).catch((error) => {
         resolve({ dataType: "chat", error: error.response.data });
       });
@@ -49,7 +49,7 @@ module.exports = (data) => {
       createChat(data.token, data.chat)
       .then((response) => {
         // And now let's update our chats list.
-        resolve({ dataType: "createChat", response: response });
+        resolve({ dataType: "createChat", response: response, private: true });
       }).catch((error) => {
         resolve({ dataType: "createChat", error: error.response.data });
       });
@@ -57,7 +57,7 @@ module.exports = (data) => {
     } else if (data.type == "invitations") {
       getInvitations(data.token, data.cid)
       .then((response) => {
-        resolve({ dataType: "invitations", response, connection: data.connection });
+        resolve({ dataType: "invitations", response, private: true });
       }).catch((error) => {
         resolve({ dataType: "invitations", error: error.response.data });
       });
@@ -68,7 +68,7 @@ module.exports = (data) => {
         // And now let's update our chats list.
         getChats(data.token)
         .then((response) => {
-          resolve({ dataType: "chats", response });
+          resolve({ dataType: "chats", response, private: true });
         });
       }).catch((error) => {
         resolve({ dataType: "useInvite", error: error.response.data });
