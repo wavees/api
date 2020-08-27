@@ -64,7 +64,7 @@ module.exports = (socket) => {
     actions.getData(data)
     .then((response) => {
       if (response.private) {
-        socket.emit(data.dataType, { response: data.response });
+        socket.emit(response.dataType, response);
       } else {
         events.emit('socketResponse', {
           uid: settings.uid,
