@@ -3,36 +3,78 @@ const actions = {
   getData: require('./actions/getData')
 };
 
+const randomizer = require('../helpers/randomizer');
+
 module.exports = (socket) => {
   // Small object, that'll determine
   // things, that our socket wants
   // to listen to.
   let settings = {
+    authorized: false,
+
     uid: null,
     listenTo: []
   };
 
-  // @action getData 
-  socket.on('getData', (e) => {
-    actions.getData(e)
+  socket.on('authorize', (data) => {
+    // Let's try to authorize our socket...
+    actions.getData({ type: "account", token: data.token })
     .then((response) => {
-      socket.emit(response.dataType, response);
+      const user = response.response;
+
+      if (user.uid != null) {
+        // Let's now save user's uid...
+        settings.authorized = true;
+        settings.uid        = user.uid;
+        
+        // And now let's reply with user
+        // information...
+        events.emit('socketResponse', {
+          uid: user.uid,
+          data: response
+        });
+      };
     });
   });
 
-  // @action Settings
-  socket.on('settings', (e) => {
-    settings = e;
+  socket.on('register', (data) => {
+    // Let's try to register our user...
+    actions.getData({ type: "createAccount", user: data })
+    .then((response) => {
+      const user = response.response.user;
+
+      if (user.uid != null) {
+        settings.authorized = true;
+        settings.uid        = user.uid;
+
+        // And now let's reply with
+        // our new user information.
+        events.emit('socketResponse', {
+          uid: user.uid,
+          data: response
+        })
+      };
+    });
   });
 
-  // And now let's listene to
-  // our events.
-  events.on("socketEvent", (event) => {
-    if (settings.listenTo.includes(event.event)) {
-      // Let's now check current Author ID;
-      if (settings.uid == null ? event.aid : settings.uid == event.aid) {
-        socket.emit(event.event, event);
-      };
+  // @action getData 
+  socket.on('getData', (event) => {
+    if (!settings.authorized) return;
+    let data = event;
+    data.connection = settings.connection;
+
+    actions.getData(data)
+    .then((response) => {
+      events.emit('socketResponse', {
+        uid: settings.uid,
+        data: response
+      });
+    });
+  });
+
+  events.on('socketResponse', (data) => {
+    if (data.uid = settings.uid) {
+      socket.emit(data.data.dataType == null ? "socketResponse" : data.data.dataType, { response: data.data.response });
     };
   });
 };
