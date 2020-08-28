@@ -12,6 +12,9 @@ module.exports = (data) => {
   return new Promise((resolve, reject) => {
     // Let's now check this data type.
 
+    console.log("REQUEST DATA:");
+    console.log(data);
+
     // @type account
     if (data.type == "account") {
       getAccount(data.token)
@@ -66,10 +69,7 @@ module.exports = (data) => {
       useInvitation(data.token, data.words)
       .then((response) => {
         // And now let's update our chats list.
-        getChats(data.token)
-        .then((response) => {
-          resolve({ dataType: "chats", response, private: true });
-        });
+        resolve({ dataType: "useInvite", response: response, private: true });
       }).catch((error) => {
         resolve({ dataType: "useInvite", error: error.response.data });
       });

@@ -24,6 +24,8 @@ module.exports = (uid, data) => {
     .then((response) => {
       // And now let's add this user to
       // this chat...
+      chat.id = response.data.document._id;
+
       addMember(response.data.document._id, uid)
       .then((response) => {
         resolve({

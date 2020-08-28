@@ -35,8 +35,6 @@ module.exports = (data) => {
           }
         });
       }).catch((error) => {
-        console.log("ERRRO 1");
-        console.log(error);
         reject(error);
       });
     }).catch((error) => {

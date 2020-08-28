@@ -9,9 +9,56 @@ const io         = require('socket.io')(http);
 
 const socket     = require('./socket');
 
+const createAccount  = require('./actions/account/create');
+const getAccount     = require('./actions/account/get');
+
 // Socket io route.
 io.on('connection', (e) => {
-  socket(e);
+  let authorized = false;
+
+  e.on('authorize', (data) => {
+    if (authorized) return;
+
+    // Let's try to authorize our socket...
+    getAccount(data.token)
+    .then((response) => {
+      const user = response;
+
+      if (user.uid != null) {
+        authorized = true;
+
+        // And now let's reply with user
+        // information...
+        e.emit('account', user);
+        socket(e, user);
+      };
+    }).catch((error) => {
+      console.log("ERROR 01");
+      console.log(error);
+    });
+  });
+
+  e.on('register', (data) => {
+    if (authorized) return;
+
+    // Let's try to register our user...
+    createAccount(data)
+    .then((response) => {
+      const user = response.user;
+
+      if (user.uid != null) {
+        authorized = true;
+
+        // And now let's reply with
+        // our new user information.
+        e.emit('accountCreation', response);
+        socket(e, user);
+      };
+    }).catch((error) => {
+      console.log("ERROR 02");
+      console.log(error);
+    });
+  });
 });
 
 const helpers    = {
