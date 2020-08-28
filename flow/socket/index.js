@@ -1,7 +1,7 @@
 const events  = require('../events/index.js');
 
 const getChats       = require('../actions/chats/getAll');
-const getChat        = require('../actions/chats/get');
+const getChat        = require('../helpers/chats/get');
 const createChat     = require('../actions/chats/create');
 
 const getInvitations = require('../actions/chats/invitations/getAll');
@@ -10,6 +10,17 @@ const useInvitation  = require('../actions/chats/invitations/use');
 const randomizer = require('../helpers/randomizer');
 
 module.exports = (socket, user) => {
+  // Get Chat
+  socket.on('chat', (cid) => {
+    getChat(cid)
+    .then((response) => {
+      socket.emit('chat', response);
+    }).catch((error) => {
+      console.log("ERROR 0");
+      console.log(error);
+    });
+  });
+
   // Get Chats
   socket.on('chats', () => {
     getChats(user.token)

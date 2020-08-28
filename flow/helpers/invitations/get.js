@@ -17,8 +17,11 @@ module.exports = (cid) => {
     axios.get(`${config.get('nodes.main.url')}/get/${config.get('nodes.main.key')}/${JSON.stringify(request)}`)
     .then((response) => {
       let data = response.data;
+      console.log("DATA");
+      console.log(data);
 
       if (data.length <= 0) {
+        console.log("CREATE NEW");
         // And now we need to create
         // default invitation.
         createInvitation(cid)
@@ -29,7 +32,7 @@ module.exports = (cid) => {
 
             words: response.words,
 
-            creationDate: invitation.creationDate
+            creationDate: response.creationDate
           }]);
         }).catch(() => {
           reject({ status: 500, error: "ServerError" });
