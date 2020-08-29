@@ -1,5 +1,6 @@
 const axios  = require('axios');
 const config = require('config');
+const events = require('../../../events');
 
 const moment = require('moment');
 
@@ -21,6 +22,8 @@ module.exports = (cid, uid) => {
     // And now let's post this to our database.
     axios.post(`${config.get('nodes.main.url')}/post/${config.get('nodes.main.key')}`, membership)
     .then((response) => {
+      events.emit(`chat/joined`, { chat: cid, user: uid });
+  
       resolve({
         type: "membership",
 

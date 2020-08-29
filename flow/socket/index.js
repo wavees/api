@@ -10,6 +10,23 @@ const useInvitation  = require('../actions/chats/invitations/use');
 const randomizer = require('../helpers/randomizer');
 
 module.exports = (socket, user) => {
+  let listenTo = [];
+
+  // @EVENT
+  // chat/join
+  events.on('chat/joined', (data) => {
+    if (listenTo.includes(`chat/join-${data.chat}`)) {
+      socket.emit('event.chat/joined', data);
+    };
+  });
+
+  // ListenTo
+  socket.on('listenTo', (array) => {
+    listenTo = array;
+    console.log("NEW LISTEN TO ARRAY");
+    console.log(listenTo);
+  });
+
   // Get Chat
   socket.on('chat', (cid) => {
     getChat(cid)
@@ -45,9 +62,6 @@ module.exports = (socket, user) => {
 
   // Get Invitations
   socket.on('invitations', (cid) => {
-    console.log("GET INVITATIONS");
-    console.log(user);
-    
     getInvitations(user.token, cid)
     .then((response) => {
       socket.emit('invitations', response);
