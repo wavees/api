@@ -7,11 +7,39 @@ const bearerToken = require('express-bearer-token');
 const http       = require('http').createServer(app);
 const io         = require('socket.io')(http);
 
+const axios      = require('axios');
+const config     = require('config');
+
 const socket     = require('./socket');
 
 // Socket io route.
 io.on('connection', (e) => {
-  socket(e);
+  let authorized = false;
+
+  e.on('authorize', (token) => {
+    if (authorized) return;
+
+    // And now let's try to authorize
+    // this user using Wavees Services.
+    axios.get(`${config.get('api.url')}/v1/account/${token}`)
+    .then((response) => {
+      const data = response.data;
+      // kcYp8FGNOuo1
+      if (data.type == "user") {
+        authorized = true;
+
+        // And now let's start our socket thing!
+        let user = data;
+        user.token = token;
+        
+        e.emit('authorization', user);
+
+        socket(e, user);
+      };
+    }).catch((error) => {
+
+    });
+  });
 });
 
 const helpers    = {

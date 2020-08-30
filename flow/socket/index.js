@@ -23,8 +23,6 @@ module.exports = (socket, user) => {
   // ListenTo
   socket.on('listenTo', (array) => {
     listenTo = array;
-    console.log("NEW LISTEN TO ARRAY");
-    console.log(listenTo);
   });
 
   // Get Chat

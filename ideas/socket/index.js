@@ -1,38 +1,28 @@
 const events  = require('../events/index.js');
-const actions = { 
-  getData: require('./actions/getData')
-};
 
-module.exports = (socket) => {
-  // Small object, that'll determine
-  // things, that our socket wants
-  // to listen to.
-  let settings = {
-    uid: null,
-    listenTo: []
-  };
+const getOrganizations = require('../actions/organizations/getList');
+const getPolls         = require('../actions/organizations/Polls/getList');
 
-  // @action getData 
-  socket.on('getData', (e) => {
-    actions.getData(e)
+module.exports = (socket, user) => {
+  // @action getOrganizations
+  socket.on('get.organizations', () => {
+    getOrganizations(user.token)
     .then((response) => {
-      socket.emit(response.dataType, response);
+      socket.emit('organizations', response);
+    }).catch(() => {
+      socket.emit('organizations', { error: true });
     });
   });
 
-  // @action Settings
-  socket.on('settings', (e) => {
-    settings = e;
+  // @action get polls
+  socket.on('get.polls', (oid) => {
+    getPolls(user.token, oid)
+    .then((response) => {
+      socket.emit('polls', response);
+    }).catch(() => {
+      socket.emit('polls', { error: true });
+    });
   });
 
-  // And now let's listene to
-  // our events.
-  events.on("socketEvent", (event) => {
-    if (settings.listenTo.includes(event.event)) {
-      // Let's now check current Author ID;
-      if (settings.uid == null ? event.aid : settings.uid == event.aid) {
-        socket.emit(event.event, event);
-      };
-    };
-  });
+  // @event polls update
 };
