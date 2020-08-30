@@ -1,11 +1,13 @@
 const events  = require('../events/index.js');
 
-const getChats       = require('../actions/chats/getAll');
-const getChat        = require('../helpers/chats/get');
-const createChat     = require('../actions/chats/create');
+const getChats        = require('../actions/chats/getAll');
+const getChat         = require('../helpers/chats/get');
+const createChat      = require('../actions/chats/create');
 
-const getInvitations = require('../actions/chats/invitations/getAll');
-const useInvitation  = require('../actions/chats/invitations/use');
+const getInvitations  = require('../actions/chats/invitations/getAll');
+const useInvitation   = require('../actions/chats/invitations/use');
+
+const checkPermission = require('../actions/chats/permissions/check');
 
 const randomizer = require('../helpers/randomizer');
 
@@ -18,6 +20,14 @@ module.exports = (socket, user) => {
     if (listenTo.includes(`chat/join-${data.chat}`)) {
       socket.emit('event.chat/joined', data);
     };
+  });
+
+  // Check Permission
+  socket.on('checkPermission', (token, cid, permission) => {
+    checkPermission(token, cid, permission)
+    .then((response) => {
+      socket.emit('checkedPermission', response);
+    });
   });
 
   // ListenTo

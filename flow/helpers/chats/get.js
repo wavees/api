@@ -1,5 +1,4 @@
 const axios          = require('axios');
-const c = require('config');
 const config         = require('config');
 
 const getInvitations = require('../invitations/get');

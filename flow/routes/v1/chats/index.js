@@ -5,7 +5,9 @@ const actions = {
   createChat: require('../../../actions/chats/create'),
 
   getInviteLinks: require('../../../actions/chats/invitations/getAll'),
-  useInvite: require('../../../actions/chats/invitations/use')
+  useInvite: require('../../../actions/chats/invitations/use'),
+  
+  checkPermission: require('../../../actions/chats/permissions/check')
 };
 
 // Get Chats
@@ -58,5 +60,19 @@ router.post(`/invite`, (req, res) => {
     res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
   });
 })
+
+// Check permission
+router.get('/:cid/permission/:pid', (req, res) => {
+  const token = req.token;
+  const cid   = req.params.cid;
+  const pid   = req.params.pid;
+
+  actions.checkPermission(token, cid, pid)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
+  });
+});
 
 module.exports = router;
