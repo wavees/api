@@ -24,6 +24,14 @@ module.exports = (socket, user) => {
     };
   });
 
+  // @EVENT
+  // chat/changed
+  events.on("chat/changed", (chat) => {
+    if (listenTo.includes(`chat/change-${chat.id}`)) {
+      socket.emit('event.chat/changed', chat);
+    };
+  });
+
   // Check Permission
   socket.on('checkPermission', (token, cid, permission) => {
     checkPermission(token, cid, permission)
@@ -34,6 +42,9 @@ module.exports = (socket, user) => {
 
   // ListenTo
   socket.on('listenTo', (array) => {
+    console.log("NEW LISTEN TO");
+    console.log(array);
+
     listenTo = array;
   });
 
