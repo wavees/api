@@ -9,6 +9,8 @@ const useInvitation   = require('../actions/chats/invitations/use');
 
 const checkPermission = require('../actions/chats/permissions/check');
 
+const changeName      = require('../actions/chats/changeName');
+
 const randomizer = require('../helpers/randomizer');
 
 module.exports = (socket, user) => {
@@ -65,6 +67,16 @@ module.exports = (socket, user) => {
     }).catch((error) => {
       console.log("ERROR 2");
       console.log(error);
+    });
+  });
+
+  // Change chat's name
+  socket.on('changeChatName', (cid, name) => {
+    changeName(user.token, cid, name)
+    .then((response) => {
+      socket.emit('chatName', response);
+    }).catch((error) => {
+      socket.emit('chatName', { cid: cid, error: true });
     });
   });
 

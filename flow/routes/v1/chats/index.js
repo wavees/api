@@ -7,7 +7,8 @@ const actions = {
   getInviteLinks: require('../../../actions/chats/invitations/getAll'),
   useInvite: require('../../../actions/chats/invitations/use'),
   
-  checkPermission: require('../../../actions/chats/permissions/check')
+  checkPermission: require('../../../actions/chats/permissions/check'),
+  changeName: require('../../../actions/chats/changeName.js')
 };
 
 // Get Chats
@@ -68,6 +69,20 @@ router.get('/:cid/permission/:pid', (req, res) => {
   const pid   = req.params.pid;
 
   actions.checkPermission(token, cid, pid)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
+  });
+});
+
+// Change Chat's name
+router.put('/:cid/name', (req, res) => {
+  const token = req.token;
+  const cid   = req.params.cid;
+  const name  = req.body.name;
+
+  actions.changeName(token, cid, name)
   .then((response) => {
     res.end(JSON.stringify(response));
   }).catch((error) => {
