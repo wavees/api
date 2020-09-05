@@ -11,6 +11,8 @@ const checkPermission = require('../actions/chats/permissions/check');
 
 const changeName      = require('../actions/chats/changeName');
 
+const sendMessage     = require('../actions/chats/messages/send');
+
 const randomizer = require('../helpers/randomizer');
 
 module.exports = (socket, user) => {
@@ -42,9 +44,6 @@ module.exports = (socket, user) => {
 
   // ListenTo
   socket.on('listenTo', (array) => {
-    console.log("NEW LISTEN TO");
-    console.log(array);
-
     listenTo = array;
   });
 

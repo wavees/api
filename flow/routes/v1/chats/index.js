@@ -8,7 +8,10 @@ const actions = {
   useInvite: require('../../../actions/chats/invitations/use'),
   
   checkPermission: require('../../../actions/chats/permissions/check'),
-  changeName: require('../../../actions/chats/changeName.js')
+  changeName: require('../../../actions/chats/changeName'),
+
+  getMessages: require('../../../actions/chats/messages/get'),
+  sendMessage: require('../../../actions/chats/messages/send')
 };
 
 // Get Chats
@@ -83,6 +86,37 @@ router.put('/:cid/name', (req, res) => {
   const name  = req.body.name;
 
   actions.changeName(token, cid, name)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
+  });
+});
+
+
+
+
+// List all chat's messages.
+router.get('/:cid/messages', (req, res) => {
+  const token = req.token;
+  const cid   = req.params.cid;
+  const limit = req.params.limit;
+
+  actions.getMessages(token, cid)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
+  });
+});
+
+// Send Message.
+router.post('/:cid/messages', (req, res) => {
+  const token   = req.token;
+  const cid     = req.params.cid;
+  const message = req.body;
+
+  actions.sendMessage(token, cid, message)
   .then((response) => {
     res.end(JSON.stringify(response));
   }).catch((error) => {

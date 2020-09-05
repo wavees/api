@@ -1,5 +1,5 @@
 const getToken         = require('../../helpers/tokens/get');
-const checkPermissiosn = require('./permissions/check');
+const checkPermission  = require('./permissions/check');
 const changeChat       = require('../../helpers/chats/change');
 
 module.exports = (token, cid, name) => {
@@ -9,7 +9,7 @@ module.exports = (token, cid, name) => {
     .then((response) => {
       if (response.type == "userAccount") {
         // And now let's check user's permissions. 
-        checkPermissiosn(token, cid, "changeName")
+        checkPermission(token, cid, "changeName")
         .then((response) => {
           const permission = response;
 
