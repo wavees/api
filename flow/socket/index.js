@@ -12,8 +12,7 @@ const checkPermission = require('../actions/chats/permissions/check');
 const changeName      = require('../actions/chats/changeName');
 
 const sendMessage     = require('../actions/chats/messages/send');
-
-const randomizer = require('../helpers/randomizer');
+const getMessages     = require('../actions/chats/messages/get');
 
 module.exports = (socket, user) => {
   let listenTo = [];
@@ -34,6 +33,14 @@ module.exports = (socket, user) => {
     };
   });
 
+  // @EVENT
+  // chat/sentMessage
+  events.on("chat/sentMessage", (cid, message, type) => {
+    if (listenTo.includes(`chat/messages-${cid}`)) {
+      socket.emit('event.chat/message', { cid, message, type });
+    };
+  });
+
   // Check Permission
   socket.on('checkPermission', (token, cid, permission) => {
     checkPermission(token, cid, permission)
@@ -47,6 +54,43 @@ module.exports = (socket, user) => {
     listenTo = array;
   });
 
+  // Get All Chats.
+  socket.on('getMessages', (cid) => {
+    // And now let's just get all chat's
+    // messages and return them to user.
+    getMessages(user.token, cid)
+    .then((response) => {
+      socket.emit('chatMessages', { cid, messages: response });
+    }).catch((error) => {
+      console.log("ERROR");
+      console.log(error);
+
+      socket.emit('chatMessages', { cid, error: true });
+    });
+  });
+
+  // Send Message
+  socket.on('sendMessage', (cid, message) => {
+    // Let's firstly check this message's 
+    // content.
+    if (message.content != null) {
+      // And now let's 
+      events.emit('chat/sentMessage', cid, {
+        author: {
+          type: "user",
+          uid: user.uid
+        },  
+        message
+      }, "fastMessage");
+    };
+
+    sendMessage(user.token, cid, message)
+    .catch((error) => {
+      console.log("ERROR 2");
+      console.log(error);
+    });
+  });
+  
   // Get Chat
   socket.on('chat', (cid) => {
     getChat(cid)

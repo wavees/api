@@ -1,6 +1,8 @@
 const getMessages     = require('../../../helpers/chats/messages/getAll.js');
 const getToken        = require('../../../helpers/tokens/get');
 
+const getChat         = require('../../../helpers/chats/get');
+
 const checkPermission = require('../../../helpers/chats/permissions/check');
 
 module.exports = (token, cid, limit = 50) => {
@@ -12,21 +14,38 @@ module.exports = (token, cid, limit = 50) => {
       // And now let's check this user's
       // permissions and so on.
       if (response.type == "userAccount") {
-        checkPermission(token, cid, "readMessages")
-        .then((response) => {
-          const permission = response;
+        const user = response;
 
-          if (permission.granted) {
-            // And now let's get this
-            // messages and return them.
-            getMessages(cid, limit)
+        // Now we need to check if this user
+        // is a member of this chat.
+
+        getChat(cid)
+        .then((response) => {
+          const chat = response;
+
+          if (!chat.members.includes(user.uid)) {
+            reject({ status: 400, error: "InsufficientPermission" });
+          } else {
+            checkPermission(token, cid, "readMessages")
             .then((response) => {
-              resolve(response);
+              const permission = response;
+    
+              if (permission.granted) {
+                // And now let's get this
+                // messages and return them.
+                getMessages(cid, limit)
+                .then((response) => {
+                  // By the way, let's sort them.
+                  resolve(response.sort((a, b) => { return a.sent - b.sent }));
+                }).catch((error) => {
+                  reject(error);
+                });
+              } else {
+                reject({ status: 400, error: "InsufficientPermission" });
+              };
             }).catch((error) => {
               reject(error);
             });
-          } else {
-            reject({ status: 400, error: "InsufficientPermission" });
           };
         }).catch((error) => {
           reject(error);

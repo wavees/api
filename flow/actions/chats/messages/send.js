@@ -2,6 +2,9 @@ const createMessage   = require('../../../helpers/chats/messages/create');
 const getToken        = require('../../../helpers/tokens/get');
 
 const checkPermission = require('../../../helpers/chats/permissions/check');
+const getChat         = require('../../../helpers/chats/get');
+
+const events          = require('../../../events');
 
 module.exports = (token, cid, message) => {
   return new Promise((resolve, reject) => {
@@ -12,36 +15,54 @@ module.exports = (token, cid, message) => {
       if (response.type == "userAccount") {
         // And now let's check if this user can 
         const user = response;
-        checkPermission(token, cid, "sendMessage")
+
+        // Let's firstly check if this player
+        // is a member of this chat.
+
+        getChat(cid)
         .then((response) => {
-          const permission = response;
+          const chat = response;
 
-          if (permission.granted) {
-            // Let's firtly prepare our
-            // author object.
-            const author = {
-              type: "user",
-              uid: user.uid
-            };
-
-            // Let's now prepare our message
-            // object. 
-            const msg = {
-              type: "plain",
-              content: message.content
-            };
-
-            createMessage(cid, author, msg)
+          if (!chat.members.includes(user.uid)) {
+            reject({ status: 400, error: "InsufficientPermission" });
+          } else {
+            checkPermission(token, cid, "sendMessage")
             .then((response) => {
-              resolve(response);
+              const permission = response;
+    
+              if (permission.granted) {
+                // Let's firtly prepare our
+                // author object.
+                const author = {
+                  type: "user",
+                  uid: user.uid
+                };
+    
+                // Let's now prepare our message
+                // object. 
+                const msg = {
+                  type: "plain",
+                  content: message.content
+                };
+    
+                // Let's now emit chat/sentMessage event
+                events.emit('chat/sentMessage', cid, { author, message: msg }, "storedMessage");
+    
+                createMessage(cid, author, msg)
+                .then((response) => {
+                  resolve(response);
+                }).catch((error) => {
+                  reject(error);
+                });
+              } else {
+                reject({ status: 400, error: "InsufficientPermission" });
+              };
             }).catch((error) => {
+              console.log(error);
               reject(error);
             });
-          } else {
-            reject({ status: 400, error: "InsufficientPermission" });
           };
         }).catch((error) => {
-          console.log(error);
           reject(error);
         });
       } else {

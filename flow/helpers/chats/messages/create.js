@@ -16,7 +16,9 @@ module.exports = (cid, author, message) => {
       author,
 
       // Message itself
-      message
+      message,
+
+      sent: moment().unix()
     };
 
     axios.post(`${config.get('nodes.main.url')}/post/${config.get('nodes.main.key')}`, query)
