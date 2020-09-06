@@ -35,7 +35,9 @@ module.exports = (cid) => {
           ownerId: data.ownerId,
           members: [],
 
-          invitations: []
+          invitations: [],
+
+          settings: {}
         };
 
         // And now we need to find this
