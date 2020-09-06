@@ -41,7 +41,7 @@ module.exports = (token, words) => {
               const chat = response;
 
               if (chat.members.includes(token.uid)) {
-                reject({ status: 400, error: "UserAlreadyAChatMember" });
+                reject({ status: 400, error: "UserAlreadyAChatMember", cid: data.cid });
               } else {
                 // By the way, let's send join
                 // message to this chat.
