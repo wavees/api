@@ -7,6 +7,8 @@ const addMember   = require('../../../helpers/chats/members/add');
 const getChat     = require('../../../helpers/chats/get');
 const sendMessage = require('../../../helpers/chats/messages/create');
 
+const events      = require('../../../events');
+
 module.exports = (token, words) => {
   return new Promise((resolve, reject) => {
     // Let's firstly get token information
@@ -34,17 +36,17 @@ module.exports = (token, words) => {
 
             // Let's check if this user is already
             // a member of this chat.
-            console.log(data.cid);
             getChat(data.cid)
             .then((response) => {
               const chat = response;
 
-              if (chat.members.includes()) {
+              if (chat.members.includes(token.uid)) {
                 reject({ status: 400, error: "UserAlreadyAChatMember" });
               } else {
                 // By the way, let's send join
                 // message to this chat.
                 if (chat.settings.joinMessage == null ? true : chat.settings.joinMessage) {
+                  events.emit('chat/sentMessage', data.cid, { author: { type: "systemJoinMessage", uid: token.uid }, message: { type: "joinMessage" } }, "storedMessage");
                   sendMessage(data.cid, { type: "systemJoinMessage", uid: token.uid }, { type: "joinMessage" });  
                 };
 
