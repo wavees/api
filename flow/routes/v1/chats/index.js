@@ -2,6 +2,8 @@ const router  = require('express').Router();
 
 const actions = {
   getChats: require('../../../actions/chats/getAll'),
+  getChat: require('../../../actions/chats/get'),
+
   createChat: require('../../../actions/chats/create'),
 
   getInviteLinks: require('../../../actions/chats/invitations/getAll'),
@@ -13,6 +15,19 @@ const actions = {
   getMessages: require('../../../actions/chats/messages/get'),
   sendMessage: require('../../../actions/chats/messages/send')
 };
+
+// Get Chat
+router.get(`/:cid`, (req, res) => {
+  const token = req.token;
+  const cid   = req.params.cid;
+
+  actions.getChat(token, cid)
+  .then((response) => {
+    res.end(JSON.stringify(response));
+  }).catch((error) => {
+    res.status(error.status == null ? 500 : error.status).end(JSON.stringify(error));
+  });
+});
 
 // Get Chats
 router.get(`/`, (req, res) => {
