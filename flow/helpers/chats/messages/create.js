@@ -3,6 +3,8 @@ const config = require('config');
 
 const moment = require('moment');
 
+const cache  = require('apicache');
+
 module.exports = (cid, author, message) => {
   return new Promise((resolve, reject) => {
     // Let's just create this message
@@ -23,6 +25,10 @@ module.exports = (cid, author, message) => {
 
     axios.post(`${config.get('nodes.main.url')}/post/${config.get('nodes.main.key')}`, query)
     .then((response) => {
+      // Now let's clear our chat messages cached
+      // information.
+      cache.clear(`chatMessages/${cid}`);
+
       resolve(response.data.document);
     }).catch(() => {
       reject({ status: 500, error: "ServerError" })

@@ -1,4 +1,5 @@
 const router  = require('express').Router();
+const cache    = require('apicache').middleware;
 
 const actions = {
   getChats: require('../../../actions/chats/getAll'),
@@ -17,9 +18,11 @@ const actions = {
 };
 
 // Get Chat
-router.get(`/:cid`, (req, res) => {
+router.get(`/:cid`, cache('1 day'), (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
+
+  req.apicacheGroup = `chatInformation/${cid}`;
 
   actions.getChat(token, cid)
   .then((response) => {
@@ -30,8 +33,10 @@ router.get(`/:cid`, (req, res) => {
 });
 
 // Get Chats
-router.get(`/`, (req, res) => {
+router.get(`/`, cache('1 day'), (req, res) => {
   const token = req.token;
+
+  req.apicacheGroup = `chatList/${token}`;
 
   actions.getChats(token)
   .then((response) => {
@@ -55,9 +60,11 @@ router.post(`/`, (req, res) => {
 });
 
 // Get Invite Links
-router.get(`/:cid/invites`, (req, res) => {
+router.get(`/:cid/invites`, cache('1 day'), (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
+
+  req.apicacheGroup = `chatInvitations/${cid}`;
 
   actions.getInviteLinks(token, cid)
   .then((response) => {
@@ -81,10 +88,12 @@ router.post(`/invite`, (req, res) => {
 })
 
 // Check permission
-router.get('/:cid/permission/:pid', (req, res) => {
+router.get('/:cid/permission/:pid', cache('1 day'), (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
   const pid   = req.params.pid;
+
+  req.apicacheGroup = `chatPermission/${token}-${cid}-${pid}`;
 
   actions.checkPermission(token, cid, pid)
   .then((response) => {
@@ -112,10 +121,12 @@ router.put('/:cid/name', (req, res) => {
 
 
 // List all chat's messages.
-router.get('/:cid/messages', (req, res) => {
+router.get('/:cid/messages', cache('1 day'), (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
   const limit = req.params.limit;
+
+  req.apicacheGroup = `chatMessages/${cid}`;
 
   actions.getMessages(token, cid)
   .then((response) => {

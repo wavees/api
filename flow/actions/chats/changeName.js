@@ -2,6 +2,8 @@ const getToken         = require('../../helpers/tokens/get');
 const checkPermission  = require('./permissions/check');
 const changeChat       = require('../../helpers/chats/change');
 
+const cache            = require('apicache');
+
 module.exports = (token, cid, name) => {
   return new Promise((resolve, reject) => {
     // Let's firstly get user token...
@@ -17,6 +19,11 @@ module.exports = (token, cid, name) => {
             // And now let's change chat's name...
             changeChat(cid, { name })
             .then((chat) => {
+              // By the way, let's now clear our
+              // cached chat's information.
+
+              caches.clear(`chatInformation/${cid}`);
+
               resolve(chat);
             }).catch((error) => {
               reject(error);

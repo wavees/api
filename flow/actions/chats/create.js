@@ -1,6 +1,8 @@
 const getToken   = require('../../helpers/tokens/get');
 const createChat = require('../../helpers/chats/create');
 
+const cache      = require('apicache');
+
 module.exports = (token, data) => {
   return new Promise((resolve, reject) => {
     // Let's firstly check our token.
@@ -12,6 +14,10 @@ module.exports = (token, data) => {
         // And now let's just create new chat.
         createChat(token.uid, data)
         .then((response) => {
+          // Now let's clear our chat list
+          // cached information.
+          caches.clear(`chatList/${token}`);
+
           resolve(response)
         }).catch((error) => {
           reject(error);

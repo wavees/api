@@ -1,4 +1,5 @@
 const router  = require('express').Router();
+const cache    = require('apicache').middleware;
 
 const actions = {
   getAccount: require('../../../actions/account/get'),
@@ -6,8 +7,10 @@ const actions = {
 };
 
 // Get account's information
-router.get('/', (req, res) => {
+router.get('/', cache('1 day'), (req, res) => {
   const token = req.token;
+
+  req.apicacheGroup = `accountInformation/${token}`;
 
   // And now let's just call our action function.
   actions.getAccount(token)
