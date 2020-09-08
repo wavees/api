@@ -1,5 +1,9 @@
 const router  = require('express').Router();
-const cache    = require('apicache').middleware;
+const cache    = require('apicache');
+
+cache.options({
+  appendKey: (req, res) => req.token
+});
 
 const actions = {
   getAccount: require('../../../actions/account/get'),
@@ -7,7 +11,7 @@ const actions = {
 };
 
 // Get account's information
-router.get('/', cache('1 day'), (req, res) => {
+router.get('/', cache.middleware('1 day'), (req, res) => {
   const token = req.token;
 
   req.apicacheGroup = `accountInformation/${token}`;
