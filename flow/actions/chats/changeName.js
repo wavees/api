@@ -23,6 +23,7 @@ module.exports = (token, cid, name) => {
               // cached chat's information.
 
               cache.clear(`chatInformation/${cid}`);
+              cache.clear(`chatList/${token}`);
 
               resolve(chat);
             }).catch((error) => {
