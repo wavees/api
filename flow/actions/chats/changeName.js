@@ -22,7 +22,7 @@ module.exports = (token, cid, name) => {
               // By the way, let's now clear our
               // cached chat's information.
 
-              caches.clear(`chatInformation/${cid}`);
+              cache.clear(`chatInformation/${cid}`);
 
               resolve(chat);
             }).catch((error) => {
