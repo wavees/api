@@ -8,15 +8,15 @@ module.exports = (token, data) => {
     // Let's firstly check our token.
     getToken((token))
     .then((response) => {
-      const token = response;
+      const user = response;
 
-      if (token.type == "userAccount") {
+      if (user.type == "userAccount") {
         // And now let's just create new chat.
-        createChat(token.uid, data)
+        createChat(user.uid, data)
         .then((response) => {
           // Now let's clear our chat list
           // cached information.
-          caches.clear(`chatList/${token}`);
+          cache.clear(`chatList/${token}`);
 
           resolve(response)
         }).catch((error) => {
