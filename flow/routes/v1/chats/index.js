@@ -22,11 +22,13 @@ const actions = {
 };
 
 // Get Chat
-router.get(`/:cid`, cache.middleware('1 day'), (req, res) => {
+
+// cache.middleware('1 day'),
+router.get(`/:cid`, (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
 
-  req.apicacheGroup = `chatInformation/${cid}`;
+  // req.apicacheGroup = `chatInformation/${cid}`;
 
   actions.getChat(token, cid)
   .then((response) => {
@@ -37,10 +39,12 @@ router.get(`/:cid`, cache.middleware('1 day'), (req, res) => {
 });
 
 // Get Chats
-router.get(`/`, cache.middleware('1 day'), (req, res) => {
+
+// cache.middleware('1 day'),
+router.get(`/`, (req, res) => {
   const token = req.token;
 
-  req.apicacheGroup = `chatList/${token}`;
+  // req.apicacheGroup = `chatList/${token}`;
 
   actions.getChats(token)
   .then((response) => {
@@ -64,11 +68,13 @@ router.post(`/`, (req, res) => {
 });
 
 // Get Invite Links
-router.get(`/:cid/invites`, cache.middleware('1 day'), (req, res) => {
+
+// cache.middleware('1 day'),
+router.get(`/:cid/invites`, (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
 
-  req.apicacheGroup = `chatInvitations/${cid}`;
+  // req.apicacheGroup = `chatInvitations/${cid}`;
 
   actions.getInviteLinks(token, cid)
   .then((response) => {
@@ -92,12 +98,14 @@ router.post(`/invite`, (req, res) => {
 })
 
 // Check permission
-router.get('/:cid/permission/:pid', cache.middleware('1 day'), (req, res) => {
+
+// cache.middleware('1 day'),
+router.get('/:cid/permission/:pid', (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
   const pid   = req.params.pid;
 
-  req.apicacheGroup = `chatPermission/${token}-${cid}-${pid}`;
+  // req.apicacheGroup = `chatPermission/${token}-${cid}-${pid}`;
 
   actions.checkPermission(token, cid, pid)
   .then((response) => {
@@ -125,12 +133,14 @@ router.put('/:cid/name', (req, res) => {
 
 
 // List all chat's messages.
-router.get('/:cid/messages', cache.middleware('1 day'), (req, res) => {
+
+// cache.middleware('1 day'),
+router.get('/:cid/messages', (req, res) => {
   const token = req.token;
   const cid   = req.params.cid;
   const limit = req.params.limit;
 
-  req.apicacheGroup = `chatMessages/${cid}`;
+  // req.apicacheGroup = `chatMessages/${cid}`;
 
   actions.getMessages(token, cid)
   .then((response) => {

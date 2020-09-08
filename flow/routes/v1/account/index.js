@@ -11,10 +11,11 @@ const actions = {
 };
 
 // Get account's information
-router.get('/', cache.middleware('1 day'), (req, res) => {
+// cache.middleware('1 day')
+router.get('/', (req, res) => {
   const token = req.token;
 
-  req.apicacheGroup = `accountInformation/${token}`;
+  // req.apicacheGroup = `accountInformation/${token}`;
 
   // And now let's just call our action function.
   actions.getAccount(token)
