@@ -2,6 +2,7 @@ const getToken   = require('../../helpers/tokens/get');
 const createChat = require('../../helpers/chats/create');
 
 const cache      = require('apicache');
+const events     = require('../../events');
 
 module.exports = (token, data) => {
   return new Promise((resolve, reject) => {
@@ -17,6 +18,10 @@ module.exports = (token, data) => {
           // Now let's clear our chat list
           // cached information.
           cache.clear(`chatList/${token}`);
+
+          // And now let's emit our
+          // global event.
+          events.emit('chat/created', response.chat);
 
           resolve(response)
         }).catch((error) => {

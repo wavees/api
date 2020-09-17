@@ -39,6 +39,14 @@ module.exports = (socket, user) => {
   });
 
   // @EVENT
+  // chat/create
+  events.on("chat/created", (chat) => {
+    if (listenTo.includes(`chat/creation`) && chat.ownerId == user.uid) {
+      socket.emit('event.chat/created', chat);
+    };
+  });
+
+  // @EVENT
   // chat/sentMessage
   events.on("chat/sentMessage", (cid, message, type) => {
     if (listenTo.includes(`chat/messages-${cid}`)) {
