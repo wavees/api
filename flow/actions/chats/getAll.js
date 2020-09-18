@@ -2,6 +2,8 @@ const getAllChats = require('../../helpers/chats/getAll');
 const getChat     = require('../../helpers/chats/get');
 const getToken    = require('../../helpers/tokens/get');
 
+const getSettings = require('../../helpers/chats/settings/user');
+
 module.exports = (token) => {
   return new Promise((resolve, reject) => {
 
@@ -25,11 +27,22 @@ module.exports = (token) => {
             memberships.forEach((membership) => {
               getChat(membership.cid)
               .then((response) => {
-                chats.push(response);
+                const chat = response;
 
-                if (chats.length >= membersLength) {
-                  resolve(chats.sort());
-                };
+                // And now let's get user-specific
+                // chat settings.
+                getSettings(0, 0)
+                .then((settings) => {
+                  chat.settings.user = settings
+
+                  chats.push(chat);
+
+                  if (chats.length >= membersLength) {
+                    resolve(chats.sort((a,b) => (a.settings.user.position > b.settings.user.position) ? 1 : ((b.settings.user.position > a.settings.user.position) ? -1 : 0)));
+                  };
+                }).catch((error) => {
+                  membersLength -= 1;
+                });
               }).catch(() => {
                 membersLength -= 1;
               });
