@@ -30,6 +30,7 @@ io.on('connection', (e) => {
         // And now let's reply with user
         // information...
         e.emit('account', user);
+        e.emit('authorized', true);
         socket(e, user);
       };
     }).catch((error) => {
@@ -51,6 +52,7 @@ io.on('connection', (e) => {
 
         // And now let's reply with
         // our new user information.
+        e.emit('authorized', true);
         e.emit('accountCreation', response);
         socket(e, user);
       };
